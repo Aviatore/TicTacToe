@@ -17,6 +17,7 @@ namespace TicTacToe
     }
     public class Board
     {
+        readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
         private int[,] board;
 
         private readonly Dictionary<int, string> _marks = new Dictionary<int, string>()
@@ -25,16 +26,29 @@ namespace TicTacToe
             {1, "X"},
             {2, "O"}
         };
-
         
-
         private readonly int _rowLength;
         private readonly int _colLength;
+        private readonly int[] _cols;
+        public readonly string[] ColLabels;
+        public readonly char[] RowLabels;
         
         public Board(int rowLength, int colLength)
         {
             _rowLength = rowLength;
             _colLength = colLength;
+            
+            _cols = new int[_colLength];
+            for (int i = 0; i < _colLength; i++)
+                _cols[i] = i + 1;
+
+            ColLabels = new string[_colLength];
+            for (int i = 0; i < _colLength; i++)
+                ColLabels[i] = _cols[i].ToString();
+
+            RowLabels = new char[_rowLength];
+            for (int i = 0; i < _rowLength; i++)
+                RowLabels[i] = _rowsTemplate[i];
             
             board = new int[rowLength, colLength];
 
@@ -45,20 +59,6 @@ namespace TicTacToe
 
         public void Print(string player1, string player2, int score1, int score2)
         {
-            char[] rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
-            
-            int[] cols = new int[_colLength];
-            for (int i = 0; i < _colLength; i++)
-                cols[i] = i + 1;
-
-            string[] colLabels = new string[_colLength];
-            for (int i = 0; i < _colLength; i++)
-                colLabels[i] = cols[i].ToString();
-
-            char[] rowLabels = new char[_rowLength];
-            for (int i = 0; i < _rowLength; i++)
-                rowLabels[i] = rowsTemplate[i];
-
             string[] line = new string[_rowLength];
             for (int i = 0; i < _rowLength; i++)
                 line[i] = "---";
@@ -73,13 +73,13 @@ namespace TicTacToe
             Console.WriteLine($"{spaceLeft}{scoreNames}");
             Console.WriteLine($"{spaceLeft}{scoreValues}");
             Console.WriteLine(" ");
-            Console.WriteLine($"   {String.Join("   ", colLabels)}");
+            Console.WriteLine($"   {String.Join("   ", ColLabels)}");
 
             for (int i = 0; i < _rowLength; i++)
             {
                 int arrayValue;
                 
-                Console.Write($"{rowLabels[i]}  ");
+                Console.Write($"{RowLabels[i]}  ");
                 for (int j = 0; j < _colLength - 1; j++)
                 {
                     arrayValue = board[i, j];
@@ -117,6 +117,11 @@ namespace TicTacToe
         public void Mark(Player player, Point location)
         {
             board[location.Row, location.Col] = player.Mark;
+        }
+
+        public int GetBoardValue(Point location)
+        {
+            return board[location.Row, location.Col];
         }
     }
 }

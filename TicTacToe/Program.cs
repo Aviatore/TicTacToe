@@ -9,7 +9,8 @@ namespace TicTacToe
             Console.WriteLine("Hello World!");
             
             Game game = new Game(3, 3);
-            game.TestGetFreePlaces();
+            //game.TestGetFreePlaces();
+            game.GetMove();
         }
     }
 }

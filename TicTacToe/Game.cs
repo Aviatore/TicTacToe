@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace TicTacToe
 {
@@ -28,8 +29,45 @@ namespace TicTacToe
 
         public void ShowBoard()
         {
-            //board.Print("John", "Mike", 2, 5);
+            board.Print("John", "Mike", 2, 5);
             
+        }
+
+        public Point GetMove()
+        {
+            bool loop = true;
+
+            Point location = new Point();
+            
+            while (loop)
+            {
+                Console.Write("Please, give coordinates: ");
+                string userInput = Console.ReadLine();
+
+                if (userInput != null)
+                {
+                    if (userInput == "quit")
+                    {
+                        Console.WriteLine("Good bye!");
+                        Environment.Exit(0);
+                    }
+                    else if (userInput.Length == 2)
+                    {
+                        int rowIndex = Array.IndexOf(board.RowLabels, Char.ToUpper(userInput[0]));
+                        int colIndex = Array.IndexOf(board.ColLabels, Char.ToUpper(userInput[1]).ToString());
+                        
+                        if (rowIndex >= 0 && colIndex >= 0)
+                            location = new Point(rowIndex, colIndex);
+                        else
+                            continue;
+                    }
+                }
+                
+                if (board.GetBoardValue(location) == 0)
+                    return location;
+            }
+            
+            return location;
         }
 
         /// <summary>
