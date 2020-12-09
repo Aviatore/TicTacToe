@@ -64,12 +64,17 @@ namespace TicTacToe
 
             for (int i = 0; i < _row; i++)
             {
+                int arrayValue;
+                
                 Console.Write($"{rows[i]}  ");
                 for (int j = 0; j < _col - 1; j++)
                 {
-                    Console.Write($"{board[i, j]} | ");
+                    arrayValue = board[i, j];
+                    Console.Write($"{Marks[arrayValue]} | ");
                 }
-                Console.WriteLine(board[i, board.GetUpperBound(0)]);
+                
+                arrayValue = board[i, board.GetUpperBound(0)];
+                Console.WriteLine(Marks[arrayValue]);
                 
                 if (i < _row - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
