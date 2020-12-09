@@ -4,6 +4,19 @@ using System.Drawing;
 
 namespace TicTacToe
 {
+    public enum Colors
+    {
+        Blue = ConsoleColor.Blue,
+        Yellow = ConsoleColor.Yellow,
+        Red = ConsoleColor.Red
+    }
+    public struct Player
+    {
+        public string Name {get;}
+        public int Mark { get; }
+        public int Points { get; set; }
+        public Colors Color { get; set; }
+    }
     public class Game
     {
         private Board board;
@@ -29,7 +42,9 @@ namespace TicTacToe
             
             foreach (Point pair in freePlaces)
             {
+                
                 Console.WriteLine($"Row {row}: {pair.Row},{pair.Col}");
+                
             }
         }
     }
