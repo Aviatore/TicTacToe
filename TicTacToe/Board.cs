@@ -8,25 +8,25 @@ namespace TicTacToe
     {
         private int[,] board;
 
-        private Dictionary<int, string> Marks = new Dictionary<int, string>()
+        private readonly Dictionary<int, string> _marks = new Dictionary<int, string>()
         {
             {0, "."},
             {1, "X"},
             {2, "O"}
         };
 
-        private int _row;
-        private int _col;
+        private readonly int _rowLength;
+        private readonly int _colLength;
         
-        public Board(int row, int col)
+        public Board(int rowLength, int colLength)
         {
-            _row = row;
-            _col = col;
+            _rowLength = rowLength;
+            _colLength = colLength;
             
-            board = new int[row, col];
+            board = new int[rowLength, colLength];
 
-            for (int i = 0; i < row; i++)
-            for (int j = 0; j < col; j++)
+            for (int i = 0; i < rowLength; i++)
+            for (int j = 0; j < colLength; j++)
                 board[i, j] = 0;
         }
 
@@ -34,49 +34,49 @@ namespace TicTacToe
         {
             char[] rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
             
-            int[] cols = new int[_col];
-            for (int i = 0; i < _col; i++)
+            int[] cols = new int[_colLength];
+            for (int i = 0; i < _colLength; i++)
                 cols[i] = i + 1;
 
-            string[] colsString = new string[_col];
-            for (int i = 0; i < _col; i++)
-                colsString[i] = cols[i].ToString();
+            string[] colLabels = new string[_colLength];
+            for (int i = 0; i < _colLength; i++)
+                colLabels[i] = cols[i].ToString();
 
-            char[] rows = new char[_row];
-            for (int i = 0; i < _row; i++)
-                rows[i] = rowsTemplate[i];
+            char[] rowLabels = new char[_rowLength];
+            for (int i = 0; i < _rowLength; i++)
+                rowLabels[i] = rowsTemplate[i];
 
-            string[] line = new string[_row];
-            for (int i = 0; i < _row; i++)
+            string[] line = new string[_rowLength];
+            for (int i = 0; i < _rowLength; i++)
                 line[i] = "---";
 
-            int boardTotalLength = (_row * 3) + (_row - 1) + 2;
+            int boardTotalLength = (_rowLength * 3) + (_rowLength - 1) + 2;
 
             string scoreNames = $"{player1} : {player2}";
-            string score = $"{score1.ToString().PadLeft(player1.Length)} : {score2.ToString()}";
-            int scoreOffset = (int)((boardTotalLength - scoreNames.Length) / 2);
+            string scoreValues = $"{score1.ToString().PadLeft(player1.Length)} : {score2.ToString()}";
+            int scoreOffset = ((boardTotalLength - scoreNames.Length) / 2);
 
             string spaceLeft = new String(' ', scoreOffset);
             Console.WriteLine($"{spaceLeft}{scoreNames}");
-            Console.WriteLine($"{spaceLeft}{score}");
+            Console.WriteLine($"{spaceLeft}{scoreValues}");
             Console.WriteLine(" ");
-            Console.WriteLine($"   {String.Join("   ", colsString)}");
+            Console.WriteLine($"   {String.Join("   ", colLabels)}");
 
-            for (int i = 0; i < _row; i++)
+            for (int i = 0; i < _rowLength; i++)
             {
                 int arrayValue;
                 
-                Console.Write($"{rows[i]}  ");
-                for (int j = 0; j < _col - 1; j++)
+                Console.Write($"{rowLabels[i]}  ");
+                for (int j = 0; j < _colLength - 1; j++)
                 {
                     arrayValue = board[i, j];
-                    Console.Write($"{Marks[arrayValue]} | ");
+                    Console.Write($"{_marks[arrayValue]} | ");
                 }
                 
                 arrayValue = board[i, board.GetUpperBound(0)];
-                Console.WriteLine(Marks[arrayValue]);
+                Console.WriteLine(_marks[arrayValue]);
                 
-                if (i < _row - 1)
+                if (i < _rowLength - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
             }
         }
