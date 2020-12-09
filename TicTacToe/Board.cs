@@ -113,5 +113,10 @@ namespace TicTacToe
 
             return freePlaces;
         }
+
+        public void Mark(Player player, Point location)
+        {
+            board[location.Row, location.Col] = player.Mark;
+        }
     }
 }
