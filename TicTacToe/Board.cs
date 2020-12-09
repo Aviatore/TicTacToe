@@ -4,6 +4,17 @@ using Microsoft.VisualBasic;
 
 namespace TicTacToe
 {
+    public struct Point
+    {
+        public int Row { get; set; }
+        public int Col { get; set; }
+
+        public Point(int row, int col)
+        {
+            Row = row;
+            Col = col;
+        }
+    }
     public class Board
     {
         private int[,] board;
@@ -14,6 +25,8 @@ namespace TicTacToe
             {1, "X"},
             {2, "O"}
         };
+
+        
 
         private readonly int _rowLength;
         private readonly int _colLength;
@@ -79,6 +92,26 @@ namespace TicTacToe
                 if (i < _rowLength - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
             }
+        }
+
+        public List<Point> GetFreePlaces()
+        {
+            //int [][] freePlaces = new int[_rowLength][];
+            List<Point> freePlaces = new List<Point>();
+
+            for (int i = 0; i < _rowLength; i++)
+            {
+                for (int j = 0; j < _colLength; j++)
+                {
+                    if (board[i, j] == 0)
+                    {
+                        Point rowIndexPair = new Point(i, j);
+                        freePlaces.Add(rowIndexPair);
+                    }
+                }
+            }
+
+            return freePlaces;
         }
     }
 }
