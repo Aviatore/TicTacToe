@@ -30,13 +30,15 @@ namespace TicTacToe
         private readonly int _rowLength;
         private readonly int _colLength;
         private readonly int[] _cols;
+        private readonly int _intemsNumberToWin;
         public readonly string[] ColLabels;
         public readonly char[] RowLabels;
-        
-        public Board(int rowLength, int colLength)
+
+        public Board(int rowLength, int colLength, int intemsNumberToWin)
         {
             _rowLength = rowLength;
             _colLength = colLength;
+            _intemsNumberToWin = intemsNumberToWin;
             
             _cols = new int[_colLength];
             for (int i = 0; i < _colLength; i++)
@@ -132,6 +134,11 @@ namespace TicTacToe
         public int GetBoardValue(Point location)
         {
             return board[location.Row, location.Col];
+        }
+
+        public bool IsPlayerWon(Player player)
+        {
+            return true;
         }
     }
 }

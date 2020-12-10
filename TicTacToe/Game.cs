@@ -27,7 +27,7 @@ namespace TicTacToe
         
         public Game(int row, int col)
         {
-            board = new Board(row, col);
+            board = new Board(row, col, 3);
             
             Player1 = new Player(Species.Human, "John", 1, board);
             Player2 = new Player( Species.Human,"Mike", 2, board);
