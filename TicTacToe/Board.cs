@@ -114,6 +114,16 @@ namespace TicTacToe
             return freePlaces;
         }
 
+        public bool IsBoardFull()
+        {
+            for (int i = 0; i < _rowLength; i++)
+                for (int j = 0; j < _colLength; j++)
+                    if (board[i, j] == 0)
+                        return false;
+
+            return true;
+        }
+
         public void Mark(Player player, Point location)
         {
             board[location.Row, location.Col] = player.Mark;

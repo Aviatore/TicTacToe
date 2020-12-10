@@ -13,13 +13,16 @@ namespace TicTacToe
     }
     public struct Player
     {
-        public string Name {get;}
-        public int Mark { get; }
+        public string Name {get; set; }
+        public int Mark { get; set; }
         public int Points { get; set; }
         public Colors Color { get; set; }
     }
     public class Game
     {
+        public Player player1 = new Player();
+        public Player player2 = new Player();
+        
         private Board board;
         
         public Game(int row, int col)
