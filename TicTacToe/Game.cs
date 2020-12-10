@@ -12,6 +12,12 @@ namespace TicTacToe
         Red = ConsoleColor.Red
     }
 
+    public enum Species
+    {
+        Human,
+        Computer
+    }
+
     public class Game
     {
         public Player Player1;
@@ -23,14 +29,17 @@ namespace TicTacToe
         {
             board = new Board(row, col);
             
-            Player1 = new Player("Human", "John", 1, board);
-            Player2 = new Player( "Human","Mike", 2, board);
+            Player1 = new Player(Species.Human, "John", 1, board);
+            Player2 = new Player( Species.Human,"Mike", 2, board);
         }
 
         public void ShowBoard()
         {
             board.Print(Player1, Player2);
+
+            Point output = Player1.GetMove();
             
+            Console.WriteLine($"Output: {output.Row},{output.Col}");
         }
 
         /// <summary>

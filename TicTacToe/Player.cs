@@ -4,23 +4,28 @@ namespace TicTacToe
 {
     public class Player
     {
+        public delegate Point DGetMove();
         public string Name {get; set; }
         public int Mark { get; set; }
         public int Points { get; set; }
         public Colors Color { get; set; }
-        public string Species { get; set; }
+        public Species Species { get; set; }
         public int Score {get; set; }
         private Board _board;
-
-        delegate Point GetMove();
-
-        public Player(string species, string name, int mark, Board board)
+        public DGetMove GetMove;
+        
+        public Player(Species species, string name, int mark, Board board)
         {
             Species = species;
             Name = name;
             Mark = mark;
             _board = board;
             Score = 0;
+
+            if (Species == Species.Human)
+            {
+                GetMove = HumanGetMove;
+            }
         }
         
         public Point HumanGetMove()
