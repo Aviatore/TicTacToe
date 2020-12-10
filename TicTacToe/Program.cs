@@ -10,7 +10,7 @@ namespace TicTacToe
             
             Game game = new Game(3, 3);
             //game.TestGetFreePlaces();
-            game.GetMove();
+            game.GameLoop();
         }
     }
 }

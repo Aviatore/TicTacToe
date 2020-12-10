@@ -11,66 +11,51 @@ namespace TicTacToe
         Yellow = ConsoleColor.Yellow,
         Red = ConsoleColor.Red
     }
-    public struct Player
+
+    public enum Species
     {
-        public string Name {get; set; }
-        public int Mark { get; set; }
-        public int Points { get; set; }
-        public Colors Color { get; set; }
+        Human,
+        Computer
     }
+
     public class Game
     {
-        public Player player1 = new Player();
-        public Player player2 = new Player();
+        public Player Player1;
+        public Player Player2;
         
         private Board board;
         
         public Game(int row, int col)
         {
             board = new Board(row, col);
+            
+            Player1 = new Player(Species.Human, "John", 1, board);
+            Player2 = new Player( Species.Human,"Mike", 2, board);
         }
 
         public void ShowBoard()
         {
-            board.Print("John", "Mike", 2, 5);
+            board.Print(Player1, Player2);
+
+            Point output = Player1.GetMove();
             
+            Console.WriteLine($"Output: {output.Row},{output.Col}");
         }
 
-        public Point GetMove()
+        public void GameLoop()
         {
             bool loop = true;
-
-            Point location = new Point();
             
             while (loop)
             {
-                Console.Write("Please, give coordinates: ");
-                string userInput = Console.ReadLine();
+                Console.Clear();
+                board.Print(Player1, Player2);
+                Player1.Turn();
 
-                if (userInput != null)
-                {
-                    if (userInput == "quit")
-                    {
-                        Console.WriteLine("Good bye!");
-                        Environment.Exit(0);
-                    }
-                    else if (userInput.Length == 2)
-                    {
-                        int rowIndex = Array.IndexOf(board.RowLabels, Char.ToUpper(userInput[0]));
-                        int colIndex = Array.IndexOf(board.ColLabels, Char.ToUpper(userInput[1]).ToString());
-                        
-                        if (rowIndex >= 0 && colIndex >= 0)
-                            location = new Point(rowIndex, colIndex);
-                        else
-                            continue;
-                    }
-                }
-                
-                if (board.GetBoardValue(location) == 0)
-                    return location;
-            }
-            
-            return location;
+                Console.Clear();
+                board.Print(Player1, Player2);
+                Player2.Turn();
+            };
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace TicTacToe
                 board[i, j] = 0;
         }
 
-        public void Print(string player1, string player2, int score1, int score2)
+        public void Print(Player player1, Player player2)
         {
             string[] line = new string[_rowLength];
             for (int i = 0; i < _rowLength; i++)
@@ -65,8 +65,8 @@ namespace TicTacToe
 
             int boardTotalLength = (_rowLength * 3) + (_rowLength - 1) + 2;
 
-            string scoreNames = $"{player1} : {player2}";
-            string scoreValues = $"{score1.ToString().PadLeft(player1.Length)} : {score2.ToString()}";
+            string scoreNames = $"{player1.Name} : {player2.Name}";
+            string scoreValues = $"{player1.Score.ToString().PadLeft(player1.Name.Length)} : {player2.Score.ToString()}";
             int scoreOffset = ((boardTotalLength - scoreNames.Length) / 2);
 
             string spaceLeft = new String(' ', scoreOffset);
