@@ -64,5 +64,17 @@ namespace TicTacToe
             
             return location;
         }
+
+        public void Turn()
+        {
+            Point newMove = GetMove();
+            _board.Mark(this, newMove);
+
+            if (_board.IsBoardFull())
+            {
+                Console.WriteLine("Game over!");
+                Environment.Exit(0);
+            }
+        }
     }
 }

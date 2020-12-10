@@ -42,6 +42,22 @@ namespace TicTacToe
             Console.WriteLine($"Output: {output.Row},{output.Col}");
         }
 
+        public void GameLoop()
+        {
+            bool loop = true;
+            
+            while (loop)
+            {
+                Console.Clear();
+                board.Print(Player1, Player2);
+                Player1.Turn();
+
+                Console.Clear();
+                board.Print(Player1, Player2);
+                Player2.Turn();
+            };
+        }
+
         /// <summary>
         /// Test function that prints all free places within the board
         /// </summary>
