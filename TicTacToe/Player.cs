@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TicTacToe
 {
@@ -8,6 +9,7 @@ namespace TicTacToe
         public string Name {get; set; }
         public int Mark { get; set; }
         public int Points { get; set; }
+        public List<Point> WinnerLocation = null;
         public Colors Color { get; set; }
         public Species Species { get; set; }
         public int Score {get; set; }
@@ -65,16 +67,22 @@ namespace TicTacToe
             return location;
         }
 
-        public void Turn()
+        public bool Turn()
         {
             Point newMove = GetMove();
             _board.Mark(this, newMove);
 
-            if (_board.IsBoardFull())
+            if (_board.IsPlayerWon(this))
             {
-                Console.WriteLine("Game over!");
-                Environment.Exit(0);
+                return false;
             }
+            else if (_board.IsBoardFull())
+            {
+                //Console.WriteLine("Game over!");
+                return false;
+            }
+
+            return true;
         }
     }
 }

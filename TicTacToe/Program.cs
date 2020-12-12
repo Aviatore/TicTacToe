@@ -8,7 +8,7 @@ namespace TicTacToe
         {
             Console.WriteLine("Hello World!");
             
-            Game game = new Game(3, 3);
+            Game game = new Game(5, 5);
             //game.TestGetFreePlaces();
             game.GameLoop();
         }

@@ -46,15 +46,33 @@ namespace TicTacToe
         {
             bool loop = true;
             
+            Console.Clear();
+            board.Print(Player1, Player2);
+            
             while (loop)
             {
-                Console.Clear();
-                board.Print(Player1, Player2);
-                Player1.Turn();
+                loop = Player1.Turn();
 
                 Console.Clear();
                 board.Print(Player1, Player2);
-                Player2.Turn();
+                
+                if (!loop)
+                {
+                    Console.WriteLine($"{Player1.Name} won the game!");
+                    break;
+                }
+                
+                
+                loop = Player2.Turn();
+                
+                Console.Clear();
+                board.Print(Player1, Player2);
+                
+                if (!loop)
+                {
+                    Console.WriteLine($"{Player2.Name} won the game!");
+                    break;
+                }
             };
         }
 

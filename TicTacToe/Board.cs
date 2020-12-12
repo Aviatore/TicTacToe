@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualBasic;
 
 namespace TicTacToe
@@ -18,7 +19,7 @@ namespace TicTacToe
     public class Board
     {
         readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
-        private int[,] board;
+        private int[,] _board;
 
         private readonly Dictionary<int, string> _marks = new Dictionary<int, string>()
         {
@@ -33,6 +34,7 @@ namespace TicTacToe
         private readonly int _intemsNumberToWin;
         public readonly string[] ColLabels;
         public readonly char[] RowLabels;
+        //public List<Point> WinnerLocation;
 
         public Board(int rowLength, int colLength, int intemsNumberToWin)
         {
@@ -52,11 +54,11 @@ namespace TicTacToe
             for (int i = 0; i < _rowLength; i++)
                 RowLabels[i] = _rowsTemplate[i];
             
-            board = new int[rowLength, colLength];
+            _board = new int[rowLength, colLength];
 
             for (int i = 0; i < rowLength; i++)
             for (int j = 0; j < colLength; j++)
-                board[i, j] = 0;
+                _board[i, j] = 0;
         }
 
         public void Print(Player player1, Player player2)
@@ -84,11 +86,11 @@ namespace TicTacToe
                 Console.Write($"{RowLabels[i]}  ");
                 for (int j = 0; j < _colLength - 1; j++)
                 {
-                    arrayValue = board[i, j];
+                    arrayValue = _board[i, j];
                     Console.Write($"{_marks[arrayValue]} | ");
                 }
                 
-                arrayValue = board[i, board.GetUpperBound(0)];
+                arrayValue = _board[i, _board.GetUpperBound(0)];
                 Console.WriteLine(_marks[arrayValue]);
                 
                 if (i < _rowLength - 1)
@@ -105,7 +107,7 @@ namespace TicTacToe
             {
                 for (int j = 0; j < _colLength; j++)
                 {
-                    if (board[i, j] == 0)
+                    if (_board[i, j] == 0)
                     {
                         Point rowIndexPair = new Point(i, j);
                         freePlaces.Add(rowIndexPair);
@@ -120,7 +122,7 @@ namespace TicTacToe
         {
             for (int i = 0; i < _rowLength; i++)
                 for (int j = 0; j < _colLength; j++)
-                    if (board[i, j] == 0)
+                    if (_board[i, j] == 0)
                         return false;
 
             return true;
@@ -128,17 +130,208 @@ namespace TicTacToe
 
         public void Mark(Player player, Point location)
         {
-            board[location.Row, location.Col] = player.Mark;
+            _board[location.Row, location.Col] = player.Mark;
         }
 
         public int GetBoardValue(Point location)
         {
-            return board[location.Row, location.Col];
+            return _board[location.Row, location.Col];
         }
 
         public bool IsPlayerWon(Player player)
         {
-            return true;
+            for (int rowIndex = 0; rowIndex < _rowLength; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < _colLength; colIndex++)
+                {
+                    Point location = new Point(rowIndex, colIndex);
+
+                    (bool IsFive, List<Point> Locations) five;
+                    
+                    five = GetFiveInRow(location, player);
+                    if (five.IsFive)
+                    {
+                        player.WinnerLocation = five.Locations;
+                        return true;
+                    }
+                    
+                    five = GetFiveInCol(location, player);
+                    if (five.IsFive)
+                    {
+                        player.WinnerLocation = five.Locations;
+                        return true;
+                    }
+                    
+                    five = GetFiveInDiagonal(location, player);
+                    if (five.IsFive)
+                    {
+                        player.WinnerLocation = five.Locations;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private (bool, List<Point>) GetFiveInRow(Point location, Player player)
+        {
+            (bool IsFive, List<Point> Locations) output = (false, new List<Point>());
+            
+            // Check if the required number of marks (to win) can be put to the right from the current location
+            if (RightPossible(location))
+            {
+
+                for (int i = location.Col; i < _colLength; i++)
+                {
+                    if (_board[location.Row, i] == player.Mark)
+                    {
+                        Point newPoint = new Point(location.Row, i);
+                        output.Locations.Add(newPoint);
+                    }
+                    else
+                    {
+                        output.Locations.Clear();
+                    }
+
+                    if (output.Locations.Count >= _intemsNumberToWin)
+                    {
+                        output.IsFive = true;
+                        return output;
+                    }
+                }
+            }
+            
+            output.IsFive = false;
+
+            return output;
+        }
+        
+        private (bool, List<Point>) GetFiveInCol(Point location, Player player)
+        {
+            (bool IsFive, List<Point> Locations) output = (false, new List<Point>());
+            
+            // Check if the required number of marks (to win) can be put down from the current location
+            if (DownPossible(location))
+            {
+
+                for (int i = location.Row; i < _rowLength; i++)
+                {
+                    if (_board[i, location.Col] == player.Mark)
+                    {
+                        Point newPoint = new Point(i, location.Col);
+                        output.Locations.Add(newPoint);
+                    }
+                    else
+                    {
+                        output.Locations.Clear();
+                    }
+
+                    if (output.Locations.Count >= _intemsNumberToWin)
+                    {
+                        output.IsFive = true;
+                        return output;
+                    }
+                }
+            }
+            
+            output.IsFive = false;
+
+            return output;
+        }
+        
+        private (bool, List<Point>) GetFiveInDiagonal(Point location, Player player)
+        {
+            (bool IsFive, List<Point> Locations) output = (false, new List<Point>());
+            int[] boardDimensions = new int[] {_rowLength, _colLength};
+            int indexMin = boardDimensions.Min();
+            int rowIndex = location.Row;
+            int colIndex = location.Col;
+            
+            // Check if the required number of marks (to win) can be put down-right || down-left from the current location
+            if (RightPossible(location) && DownPossible(location))
+            {
+                for (int i = 0; i < indexMin; i++)
+                {
+                    // Check if the calculated indexes are valid for the board array
+                    if (_board.GetUpperBound(0) >= rowIndex && _board.GetUpperBound(1) >= colIndex)
+                    {
+                        if (_board[rowIndex, colIndex] == player.Mark)
+                        {
+                            Point newPoint = new Point(rowIndex, colIndex);
+                            output.Locations.Add(newPoint);
+                        }
+                        else
+                        {
+                            output.Locations.Clear();
+                        }
+                    }
+
+                    if (output.Locations.Count >= _intemsNumberToWin)
+                    {
+                        output.IsFive = true;
+                        return output;
+                    }
+
+                    rowIndex++;
+                    colIndex++;
+                }
+            }
+            
+            rowIndex = location.Row;
+            colIndex = location.Col;
+            if (LeftPossible(location) && DownPossible(location))
+            {
+                for (int i = 0; i < indexMin; i++)
+                {
+                    // Check if the calculated indexes are valid for the board array
+                    if (_board.GetUpperBound(0) >= rowIndex && _board.GetLowerBound(1) <= colIndex)
+                    {
+                        if (_board[rowIndex, colIndex] == player.Mark)
+                        {
+                            Point newPoint = new Point(rowIndex, colIndex);
+                            output.Locations.Add(newPoint);
+                        }
+                        else
+                        {
+                            output.Locations.Clear();
+                        }
+                    }
+                    
+                    if (output.Locations.Count >= _intemsNumberToWin)
+                    {
+                        output.IsFive = true;
+                        return output;
+                    }
+
+                    rowIndex++;
+                    colIndex--;
+                }
+            }
+            
+            output.IsFive = false;
+
+            return output;
+        }
+
+        private bool RightPossible(Point location)
+        {
+            if ((_colLength - location.Col) >= _intemsNumberToWin)
+                return true;
+            return false;
+        }
+
+        private bool LeftPossible(Point location)
+        {
+            if ((location.Col + 1) >= _intemsNumberToWin)
+                return true;
+            return false;
+        }
+
+        private bool DownPossible(Point location)
+        {
+            if ((_rowLength - location.Row) >= _intemsNumberToWin)
+                return true;
+            return false;
         }
     }
 }
