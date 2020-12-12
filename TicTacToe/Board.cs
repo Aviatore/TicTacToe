@@ -18,15 +18,28 @@ namespace TicTacToe
     }
     public class Board
     {
+        public List<Point> WinnerLocation = null;
         readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
         private int[,] _board;
 
-        private readonly Dictionary<int, string> _marks = new Dictionary<int, string>()
+        private readonly Dictionary<int, char> _marks = new Dictionary<int, char>()
         {
-            {0, "."},
-            {1, "X"},
-            {2, "O"}
+            {0, '.'},
+            {1, 'X'},
+            {2, 'O'}
         };
+        
+        private Dictionary<char, ConsoleColor> _markColors = new Dictionary<char, ConsoleColor>()
+        {
+            {'.', ConsoleColor.Gray},
+            {'X', ConsoleColor.Gray},
+            {'O', ConsoleColor.Gray}
+        };
+
+        public void AddColor(int character, Colors color)
+        {
+            _markColors[_marks[character]] = (ConsoleColor)color;
+        }
         
         private readonly int _rowLength;
         private readonly int _colLength;
@@ -87,7 +100,18 @@ namespace TicTacToe
                 for (int j = 0; j < _colLength - 1; j++)
                 {
                     arrayValue = _board[i, j];
-                    Console.Write($"{_marks[arrayValue]} | ");
+                    Point location = new Point(i, j);
+                    if (WinnerLocation != null && WinnerLocation.Contains(location))
+                    {
+                        PrintColor(ConsoleColor.Green, _marks[arrayValue]);
+                    }
+                    else
+                    {
+                        PrintColor(_markColors[_marks[arrayValue]], _marks[arrayValue]);
+                    }
+                    
+                    Console.Write(" | ");
+                    //Console.Write($"{_marks[arrayValue]} | ");
                 }
                 
                 arrayValue = _board[i, _board.GetUpperBound(0)];
@@ -151,21 +175,21 @@ namespace TicTacToe
                     five = GetFiveInRow(location, player);
                     if (five.IsFive)
                     {
-                        player.WinnerLocation = five.Locations;
+                        WinnerLocation = five.Locations;
                         return true;
                     }
                     
                     five = GetFiveInCol(location, player);
                     if (five.IsFive)
                     {
-                        player.WinnerLocation = five.Locations;
+                        WinnerLocation = five.Locations;
                         return true;
                     }
                     
                     five = GetFiveInDiagonal(location, player);
                     if (five.IsFive)
                     {
-                        player.WinnerLocation = five.Locations;
+                        WinnerLocation = five.Locations;
                         return true;
                     }
                 }
@@ -332,6 +356,13 @@ namespace TicTacToe
             if ((_rowLength - location.Row) >= _intemsNumberToWin)
                 return true;
             return false;
+        }
+
+        private void PrintColor(ConsoleColor color, char character)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(character);
+            Console.ResetColor();
         }
     }
 }

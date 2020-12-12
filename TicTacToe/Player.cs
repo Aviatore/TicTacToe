@@ -9,25 +9,30 @@ namespace TicTacToe
         public string Name {get; set; }
         public int Mark { get; set; }
         public int Points { get; set; }
-        public List<Point> WinnerLocation = null;
+        
         public Colors Color { get; set; }
         public Species Species { get; set; }
         public int Score {get; set; }
         private Board _board;
         public DGetMove GetMove;
         
-        public Player(Species species, string name, int mark, Board board)
+        
+        public Player(Species species, string name, int mark, Board board, Colors color)
         {
             Species = species;
             Name = name;
             Mark = mark;
             _board = board;
             Score = 0;
+            Color = color;
 
             if (Species == Species.Human)
             {
                 GetMove = HumanGetMove;
             }
+            
+            // Assigns a color to the player's mark
+            board.AddColor(Mark, color);
         }
         
         public Point HumanGetMove()
