@@ -27,6 +27,12 @@ namespace TicTacToe
             Coords.Add(location);
         }
 
+        public void AddCoordsAtFirstPos(int row, int col)
+        {
+            Point location = new Point(row, col);
+            Coords.Insert(0, location);
+        }
+
         public void ClearCoords()
         {
             Coords.Clear();

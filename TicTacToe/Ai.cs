@@ -128,6 +128,9 @@ namespace TicTacToe
                     int rowMod = type == "row" ? i : m - 1;
                     int colMod = type == "row" ? m - 1 : i;
                     
+                    int rowMod2 = type == "row" ? i : m - 2;
+                    int colMod2 = type == "row" ? m - 2 : i;
+                    
                     int row = type == "row" ? i : m;
                     int col = type == "row" ? m : i;
                     
@@ -138,7 +141,13 @@ namespace TicTacToe
                         if (rowData.CoordsContains(rowMod, colMod) ||
                             rowData.FreeCoordsContains(rowMod, colMod))
                         {
-                            rowData.AddCoords(row, col);
+                            // Check if there is a space between marks of the same type
+                            if (rowData.CoordsContains(rowMod2, colMod2))
+                                // if YES, then insert the position to the beginning of the list from which the best move are picked
+                                rowData.AddCoordsAtFirstPos(row, col);
+                            else
+                                // if NOT, then append the position to the end of the list
+                                rowData.AddCoords(row, col);
                         }
                         else
                         {
@@ -174,6 +183,8 @@ namespace TicTacToe
                         //{
                         Point location = rowData.FreeCoords[0];
 
+                        // If the number of positions of the same mark that are next to each other or are separated by at most one space
+                        // is larger than length of the best move, then the bestMove object is updated
                         if (rowData.Coords.Count > bestMove.Length)
                         {
                             bestMove.BestMove = location;
