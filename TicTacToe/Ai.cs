@@ -27,6 +27,7 @@ namespace TicTacToe
             {
                 LocationContainer rowData = new LocationContainer();
                 
+                /*
                 for (int rowIndex = 0; rowIndex < _board.RowLength; rowIndex++)
                 {
                     for (int colIndex = 0; colIndex < _board.ColLength; colIndex++)
@@ -82,23 +83,115 @@ namespace TicTacToe
                             //}
                         }
                     }
-
+                    
                     rowData.ClearCoords();
                     rowData.ClearFreeCoords();
                     //rowData.Num = 0;
                 }
+                */
+                //ColRowChecker(mark, rowData, bestMove, "row");
+                ColRowChecker(mark, rowData, bestMove, "col");
 
                 if (bestMove.FreeCoords.Count == _board.ItemsNumberToWin - 1)
+                {
+                    foreach (Point location in bestMove.FreeCoords)
+                    {
+                        Console.WriteLine($"1: {location.Row}, {location.Col}");
+                    }
+
                     return bestMove.FreeCoords[0];
+                }
             }
 
+            foreach (Point location in bestMove.FreeCoords)
+            {
+                Console.WriteLine($"2: {location.Row}, {location.Col}");
+            }
+            
             if (bestMove.FreeCoords.Count > 0)
                 return bestMove.FreeCoords[0];
+            else
+            {
+                Console.WriteLine("Random move");
+            }
             
             List<Point> freePlaces = _board.GetFreePlaces();
             Point randomLocation = freePlaces[_random.Next(freePlaces.Count)];
             return randomLocation;
             
+        }
+
+        private void ColRowChecker(int mark, LocationContainer rowData, LocationContainer bestMove, string type)
+        {
+            int firstLoopMax = type == "row" ? _board.RowLength : _board.ColLength;
+            int secondLoopMax = type == "row" ? _board.ColLength : _board.RowLength;
+            
+            for (int i = 0; i < firstLoopMax; i++)
+            {
+                for (int m = 0; m < secondLoopMax; m++)
+                {
+                    int rowMod = type == "row" ? i : m - 1;
+                    int colMod = type == "row" ? m - 1 : i;
+                    
+                    int row = type == "row" ? i : m;
+                    int col = type == "row" ? m : i;
+                    
+                    int lenToReact;
+                    int boardValue = _board.GetValue(row, col);
+                    if (boardValue == mark)
+                    {
+                        if (rowData.CoordsContains(rowMod, colMod) ||
+                            rowData.FreeCoordsContains(rowMod, colMod))
+                        {
+                            rowData.AddCoords(row, col);
+                        }
+                        else
+                        {
+                            rowData.ClearCoords();
+                            rowData.ClearFreeCoords();
+                            rowData.AddCoords(row, col);
+                        }
+                    }
+                    else if (boardValue == 0 && !rowData.FreeCoordsContains(rowMod, colMod))
+                    {
+                        rowData.AddFreeCoords(row, col);
+                        //rowData.Num++;
+                    }
+                    else if (boardValue == 0)
+                    {
+                        rowData.ClearCoords();
+                        rowData.ClearFreeCoords();
+                        rowData.AddFreeCoords(row, col);
+                        //rowData.Num++;
+                    }
+                    else
+                    {
+                        rowData.ClearCoords();
+                        rowData.ClearFreeCoords();
+                    }
+
+                    lenToReact = (_board.RowLength - _board.ItemsNumberToWin) >= 1 ? 2 : 1;
+
+                    if (rowData.Coords.Count >= (_board.ItemsNumberToWin - lenToReact) &&
+                        rowData.FreeCoords.Count >= (_board.ItemsNumberToWin - rowData.Coords.Count))
+                    {
+                        //if (rowData.FreeCoords.Count > 0)
+                        //{
+                        Point location = rowData.FreeCoords[0];
+
+                        if (rowData.Coords.Count > bestMove.FreeCoords.Count)
+                        {
+                            bestMove.AddFreeCoords(location.Row, location.Col);
+                            //bestMove.Num = rowData.Coords.Count;
+                        }
+                        //}
+                    }
+                }
+
+                rowData.ClearCoords();
+                rowData.ClearFreeCoords();
+                //rowData.Num = 0;
+            }
         }
     }
 }
