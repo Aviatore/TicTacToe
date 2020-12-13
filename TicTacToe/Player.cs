@@ -1,31 +1,105 @@
 using System;
+using System.Collections.Generic;
 
 namespace TicTacToe
 {
+    public class BestMoveContainer
+    {
+        public Point BestMove { get; set; }
+        public int Length = 0;
+    }
+    public class LocationContainer
+    {
+        public List<Point> FreeCoords;
+        public List<Point> Coords;
+        public int Num {get; set; }
+
+        
+        public void AddFreeCoords(int row, int col)
+        {
+            Point location = new Point(row, col);
+            FreeCoords.Add(location);
+        }
+        
+        public void AddCoords(int row, int col)
+        {
+            Point location = new Point(row, col);
+            Coords.Add(location);
+        }
+
+        public void AddCoordsAtFirstPos(int row, int col)
+        {
+            Point location = new Point(row, col);
+            Coords.Insert(0, location);
+        }
+
+        public void ClearCoords()
+        {
+            Coords.Clear();
+        }
+
+        public void ClearFreeCoords()
+        {
+            FreeCoords.Clear();
+        }
+
+        public bool CoordsContains(int row, int col)
+        {
+            Point location = new Point(row, col);
+
+            return Coords.Contains(location);
+        }
+        
+        public bool FreeCoordsContains(int row, int col)
+        {
+            Point location = new Point(row, col);
+
+            return FreeCoords.Contains(location);
+        }
+        public LocationContainer()
+        {
+            FreeCoords = new List<Point>();
+            Coords = new List<Point>();
+            Num = 0;
+        }
+    }
+    
     public class Player
     {
         public delegate Point DGetMove();
         public string Name {get; set; }
         public int Mark { get; set; }
         public int Points { get; set; }
+        
         public Colors Color { get; set; }
         public Species Species { get; set; }
         public int Score {get; set; }
         private Board _board;
         public DGetMove GetMove;
+        private Random _random = new Random();
+        private Ai _ai;
         
-        public Player(Species species, string name, int mark, Board board)
+        
+        public Player(Species species, string name, int mark, Board board, Colors color)
         {
             Species = species;
             Name = name;
             Mark = mark;
             _board = board;
             Score = 0;
+            Color = color;
 
             if (Species == Species.Human)
-            {
                 GetMove = HumanGetMove;
+            else
+            {
+                _ai = new Ai(Mark, _board);
+                GetMove = _ai.AiGetMove;
             }
+
+
+            // Assigns a color to the player's mark
+            board.AddColor(Mark, color);
         }
         
         public Point HumanGetMove()
@@ -64,17 +138,23 @@ namespace TicTacToe
             
             return location;
         }
-
-        public void Turn()
+        
+        public bool Turn()
         {
             Point newMove = GetMove();
             _board.Mark(this, newMove);
 
-            if (_board.IsBoardFull())
+            if (_board.IsPlayerWon(this))
             {
-                Console.WriteLine("Game over!");
-                Environment.Exit(0);
+                return false;
             }
+            else if (_board.IsBoardFull())
+            {
+                //Console.WriteLine("Game over!");
+                return false;
+            }
+
+            return true;
         }
     }
 }

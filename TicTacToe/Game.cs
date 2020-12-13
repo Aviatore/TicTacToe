@@ -7,7 +7,7 @@ namespace TicTacToe
 {
     public enum Colors
     {
-        Blue = ConsoleColor.Blue,
+        Blue = ConsoleColor.Cyan,
         Yellow = ConsoleColor.Yellow,
         Red = ConsoleColor.Red
     }
@@ -24,13 +24,13 @@ namespace TicTacToe
         public Player Player2;
         
         private Board board;
-        
+
         public Game(int row, int col)
         {
-            board = new Board(row, col);
+            board = new Board(row, col, 4);
             
-            Player1 = new Player(Species.Human, "John", 1, board);
-            Player2 = new Player( Species.Human,"Mike", 2, board);
+            Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
+            Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
         }
 
         public void ShowBoard()
@@ -46,15 +46,33 @@ namespace TicTacToe
         {
             bool loop = true;
             
+            Console.Clear();
+            board.Print(Player1, Player2);
+            
             while (loop)
             {
-                Console.Clear();
-                board.Print(Player1, Player2);
-                Player1.Turn();
+                loop = Player1.Turn();
 
                 Console.Clear();
                 board.Print(Player1, Player2);
-                Player2.Turn();
+                
+                if (!loop)
+                {
+                    Console.WriteLine($"{Player1.Name} won the game!");
+                    break;
+                }
+                
+                
+                loop = Player2.Turn();
+                
+                Console.Clear();
+                board.Print(Player1, Player2);
+                
+                if (!loop)
+                {
+                    Console.WriteLine($"{Player2.Name} won the game!");
+                    break;
+                }
             };
         }
 
