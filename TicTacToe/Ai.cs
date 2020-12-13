@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TicTacToe
 {
@@ -17,7 +18,7 @@ namespace TicTacToe
 
         public Point AiGetMove()
         {
-            LocationContainer bestMove = new LocationContainer();
+            BestMoveContainer bestMove = new BestMoveContainer();
             
             int[] marksToCheck = new int[2];
             marksToCheck[0] = Mark;
@@ -89,27 +90,21 @@ namespace TicTacToe
                     //rowData.Num = 0;
                 }
                 */
-                //ColRowChecker(mark, rowData, bestMove, "row");
+                ColRowChecker(mark, rowData, bestMove, "row");
                 ColRowChecker(mark, rowData, bestMove, "col");
 
-                if (bestMove.FreeCoords.Count == _board.ItemsNumberToWin - 1)
+                if (bestMove.Length == _board.ItemsNumberToWin - 1)
                 {
-                    foreach (Point location in bestMove.FreeCoords)
-                    {
-                        Console.WriteLine($"1: {location.Row}, {location.Col}");
-                    }
+                    Console.WriteLine($"1: {bestMove.BestMove.Row}, {bestMove.BestMove.Col}");
 
-                    return bestMove.FreeCoords[0];
+                    return bestMove.BestMove;
                 }
             }
 
-            foreach (Point location in bestMove.FreeCoords)
-            {
-                Console.WriteLine($"2: {location.Row}, {location.Col}");
-            }
+            Console.WriteLine($"2: {bestMove.BestMove.Row}, {bestMove.BestMove.Col}");
             
-            if (bestMove.FreeCoords.Count > 0)
-                return bestMove.FreeCoords[0];
+            if (bestMove.Length > 0)
+                return bestMove.BestMove;
             else
             {
                 Console.WriteLine("Random move");
@@ -121,7 +116,7 @@ namespace TicTacToe
             
         }
 
-        private void ColRowChecker(int mark, LocationContainer rowData, LocationContainer bestMove, string type)
+        private void ColRowChecker(int mark, LocationContainer rowData, BestMoveContainer bestMove, string type)
         {
             int firstLoopMax = type == "row" ? _board.RowLength : _board.ColLength;
             int secondLoopMax = type == "row" ? _board.ColLength : _board.RowLength;
@@ -179,10 +174,10 @@ namespace TicTacToe
                         //{
                         Point location = rowData.FreeCoords[0];
 
-                        if (rowData.Coords.Count > bestMove.FreeCoords.Count)
+                        if (rowData.Coords.Count > bestMove.Length)
                         {
-                            bestMove.AddFreeCoords(location.Row, location.Col);
-                            //bestMove.Num = rowData.Coords.Count;
+                            bestMove.BestMove = location;
+                            bestMove.Length = rowData.Coords.Count;
                         }
                         //}
                     }

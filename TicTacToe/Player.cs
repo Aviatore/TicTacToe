@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace TicTacToe
 {
+    public class BestMoveContainer
+    {
+        public Point BestMove { get; set; }
+        public int Length = 0;
+    }
     public class LocationContainer
     {
         public List<Point> FreeCoords;
