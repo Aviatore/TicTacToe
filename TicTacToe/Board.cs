@@ -94,28 +94,18 @@ namespace TicTacToe
 
             for (int i = 0; i < RowLength; i++)
             {
-                int arrayValue;
-                
                 Console.Write($"{RowLabels[i]}  ");
                 for (int j = 0; j < ColLength - 1; j++)
                 {
-                    arrayValue = _board[i, j];
-                    Point location = new Point(i, j);
-                    if (WinnerLocation != null && WinnerLocation.Contains(location))
-                    {
-                        PrintColor(ConsoleColor.Green, _marks[arrayValue]);
-                    }
-                    else
-                    {
-                        PrintColor(_markColors[_marks[arrayValue]], _marks[arrayValue]);
-                    }
-                    
+                    PrintColor(i, j);
+
                     Console.Write(" | ");
                     //Console.Write($"{_marks[arrayValue]} | ");
                 }
                 
-                arrayValue = _board[i, _board.GetUpperBound(0)];
-                Console.WriteLine(_marks[arrayValue]);
+                PrintColor(i, ColLength - 1);
+                
+                Console.WriteLine("");
                 
                 if (i < RowLength - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
@@ -358,11 +348,24 @@ namespace TicTacToe
             return false;
         }
 
-        private void PrintColor(ConsoleColor color, char character)
+        private void PrintColor(int row, int col)
         {
-            Console.ForegroundColor = color;
-            Console.Write(character);
-            Console.ResetColor();
+            int arrayValue;
+            arrayValue = _board[row, col];
+            Point location = new Point(row, col);
+
+            if (WinnerLocation != null && WinnerLocation.Contains(location))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(_marks[arrayValue]);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = _markColors[_marks[arrayValue]];
+                Console.Write(_marks[arrayValue]);
+                Console.ResetColor();
+            }
         }
 
         public int GetValue(int row, int col)
