@@ -30,7 +30,7 @@ namespace TicTacToe
             board = new Board(row, col, 3);
             
             Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
-            Player2 = new Player( Species.Human,"Mike", 2, board, Colors.Red);
+            Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
         }
 
         public void ShowBoard()

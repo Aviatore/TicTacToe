@@ -41,30 +41,30 @@ namespace TicTacToe
             _markColors[_marks[character]] = (ConsoleColor)color;
         }
         
-        private readonly int _rowLength;
-        private readonly int _colLength;
+        public readonly int RowLength;
+        public readonly int ColLength;
         private readonly int[] _cols;
-        private readonly int _intemsNumberToWin;
+        public readonly int ItemsNumberToWin;
         public readonly string[] ColLabels;
         public readonly char[] RowLabels;
         //public List<Point> WinnerLocation;
 
-        public Board(int rowLength, int colLength, int intemsNumberToWin)
+        public Board(int rowLength, int colLength, int itemsNumberToWin)
         {
-            _rowLength = rowLength;
-            _colLength = colLength;
-            _intemsNumberToWin = intemsNumberToWin;
+            RowLength = rowLength;
+            ColLength = colLength;
+            ItemsNumberToWin = itemsNumberToWin;
             
-            _cols = new int[_colLength];
-            for (int i = 0; i < _colLength; i++)
+            _cols = new int[ColLength];
+            for (int i = 0; i < ColLength; i++)
                 _cols[i] = i + 1;
 
-            ColLabels = new string[_colLength];
-            for (int i = 0; i < _colLength; i++)
+            ColLabels = new string[ColLength];
+            for (int i = 0; i < ColLength; i++)
                 ColLabels[i] = _cols[i].ToString();
 
-            RowLabels = new char[_rowLength];
-            for (int i = 0; i < _rowLength; i++)
+            RowLabels = new char[RowLength];
+            for (int i = 0; i < RowLength; i++)
                 RowLabels[i] = _rowsTemplate[i];
             
             _board = new int[rowLength, colLength];
@@ -76,11 +76,11 @@ namespace TicTacToe
 
         public void Print(Player player1, Player player2)
         {
-            string[] line = new string[_rowLength];
-            for (int i = 0; i < _rowLength; i++)
+            string[] line = new string[RowLength];
+            for (int i = 0; i < RowLength; i++)
                 line[i] = "---";
 
-            int boardTotalLength = (_rowLength * 3) + (_rowLength - 1) + 2;
+            int boardTotalLength = (RowLength * 3) + (RowLength - 1) + 2;
 
             string scoreNames = $"{player1.Name} : {player2.Name}";
             string scoreValues = $"{player1.Score.ToString().PadLeft(player1.Name.Length)} : {player2.Score.ToString()}";
@@ -92,12 +92,12 @@ namespace TicTacToe
             Console.WriteLine(" ");
             Console.WriteLine($"   {String.Join("   ", ColLabels)}");
 
-            for (int i = 0; i < _rowLength; i++)
+            for (int i = 0; i < RowLength; i++)
             {
                 int arrayValue;
                 
                 Console.Write($"{RowLabels[i]}  ");
-                for (int j = 0; j < _colLength - 1; j++)
+                for (int j = 0; j < ColLength - 1; j++)
                 {
                     arrayValue = _board[i, j];
                     Point location = new Point(i, j);
@@ -117,7 +117,7 @@ namespace TicTacToe
                 arrayValue = _board[i, _board.GetUpperBound(0)];
                 Console.WriteLine(_marks[arrayValue]);
                 
-                if (i < _rowLength - 1)
+                if (i < RowLength - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
             }
         }
@@ -127,9 +127,9 @@ namespace TicTacToe
             //int [][] freePlaces = new int[_rowLength][];
             List<Point> freePlaces = new List<Point>();
 
-            for (int i = 0; i < _rowLength; i++)
+            for (int i = 0; i < RowLength; i++)
             {
-                for (int j = 0; j < _colLength; j++)
+                for (int j = 0; j < ColLength; j++)
                 {
                     if (_board[i, j] == 0)
                     {
@@ -144,8 +144,8 @@ namespace TicTacToe
 
         public bool IsBoardFull()
         {
-            for (int i = 0; i < _rowLength; i++)
-                for (int j = 0; j < _colLength; j++)
+            for (int i = 0; i < RowLength; i++)
+                for (int j = 0; j < ColLength; j++)
                     if (_board[i, j] == 0)
                         return false;
 
@@ -164,9 +164,9 @@ namespace TicTacToe
 
         public bool IsPlayerWon(Player player)
         {
-            for (int rowIndex = 0; rowIndex < _rowLength; rowIndex++)
+            for (int rowIndex = 0; rowIndex < RowLength; rowIndex++)
             {
-                for (int colIndex = 0; colIndex < _colLength; colIndex++)
+                for (int colIndex = 0; colIndex < ColLength; colIndex++)
                 {
                     Point location = new Point(rowIndex, colIndex);
 
@@ -205,7 +205,7 @@ namespace TicTacToe
             if (RightPossible(location))
             {
 
-                for (int i = location.Col; i < _colLength; i++)
+                for (int i = location.Col; i < ColLength; i++)
                 {
                     if (_board[location.Row, i] == player.Mark)
                     {
@@ -217,7 +217,7 @@ namespace TicTacToe
                         output.Locations.Clear();
                     }
 
-                    if (output.Locations.Count >= _intemsNumberToWin)
+                    if (output.Locations.Count >= ItemsNumberToWin)
                     {
                         output.IsFive = true;
                         return output;
@@ -238,7 +238,7 @@ namespace TicTacToe
             if (DownPossible(location))
             {
 
-                for (int i = location.Row; i < _rowLength; i++)
+                for (int i = location.Row; i < RowLength; i++)
                 {
                     if (_board[i, location.Col] == player.Mark)
                     {
@@ -250,7 +250,7 @@ namespace TicTacToe
                         output.Locations.Clear();
                     }
 
-                    if (output.Locations.Count >= _intemsNumberToWin)
+                    if (output.Locations.Count >= ItemsNumberToWin)
                     {
                         output.IsFive = true;
                         return output;
@@ -266,7 +266,7 @@ namespace TicTacToe
         private (bool, List<Point>) GetFiveInDiagonal(Point location, Player player)
         {
             (bool IsFive, List<Point> Locations) output = (false, new List<Point>());
-            int[] boardDimensions = new int[] {_rowLength, _colLength};
+            int[] boardDimensions = new int[] {RowLength, ColLength};
             int indexMin = boardDimensions.Min();
             int rowIndex = location.Row;
             int colIndex = location.Col;
@@ -290,7 +290,7 @@ namespace TicTacToe
                         }
                     }
 
-                    if (output.Locations.Count >= _intemsNumberToWin)
+                    if (output.Locations.Count >= ItemsNumberToWin)
                     {
                         output.IsFive = true;
                         return output;
@@ -321,7 +321,7 @@ namespace TicTacToe
                         }
                     }
                     
-                    if (output.Locations.Count >= _intemsNumberToWin)
+                    if (output.Locations.Count >= ItemsNumberToWin)
                     {
                         output.IsFive = true;
                         return output;
@@ -339,21 +339,21 @@ namespace TicTacToe
 
         private bool RightPossible(Point location)
         {
-            if ((_colLength - location.Col) >= _intemsNumberToWin)
+            if ((ColLength - location.Col) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
         private bool LeftPossible(Point location)
         {
-            if ((location.Col + 1) >= _intemsNumberToWin)
+            if ((location.Col + 1) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
         private bool DownPossible(Point location)
         {
-            if ((_rowLength - location.Row) >= _intemsNumberToWin)
+            if ((RowLength - location.Row) >= ItemsNumberToWin)
                 return true;
             return false;
         }
@@ -363,6 +363,11 @@ namespace TicTacToe
             Console.ForegroundColor = color;
             Console.Write(character);
             Console.ResetColor();
+        }
+
+        public int GetValue(int row, int col)
+        {
+            return _board[row, col];
         }
     }
 }
