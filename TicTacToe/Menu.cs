@@ -116,7 +116,7 @@ namespace TicTacToe
             if (element.BackReference != null)
             {
                 output = CreateMenuLabels(element.BackReference);
-                return $"{output}=>{element.MenuLabel}";
+                return $"{output} => {element.MenuLabel}";
             }
             else
             {

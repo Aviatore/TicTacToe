@@ -25,6 +25,7 @@ namespace TicTacToe
         ComputerComputer
     }
     
+    
     public struct Preferences
     {
         public int BoardSize;
