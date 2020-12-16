@@ -13,6 +13,13 @@ namespace TicTacToe
             {GameMode.HumanHuman, "Human vs. Human"}
         };
         
+        public static Dictionary<int, GameMode> IntToGameModeDict = new Dictionary<int, GameMode>()
+        {
+            {1, GameMode.ComputerComputer},
+            {2, GameMode.HumanComputer},
+            {3, GameMode.HumanHuman}
+        };
+        
         public static void CreateMenu(Preferences preferences)
         {
             Menu menu = new Menu();
@@ -36,6 +43,7 @@ namespace TicTacToe
             boardSize.AddElement(boardSizeSet);
             
             Menu numberOfMarksToWin = new Menu($"Number of marks to win: {preferences.numberOfMarksToWin}", "");
+            
             numberOfMarksToWin.SetCallBack((string s, Menu element) =>
             {
                 if (int.TryParse(s, out preferences.numberOfMarksToWin))
@@ -46,9 +54,28 @@ namespace TicTacToe
 
                 return false;
             });
+            
             Menu numberOfMarksToWinSet = new Menu("Numbers of marks to win (choose between 3-5)", "");
             numberOfMarksToWin.AddElement(numberOfMarksToWinSet);
             
+            
+            gameMode.SetCallBack((string s, Menu element) =>
+            {
+                int userInput;
+                if (int.TryParse(s, out userInput) && userInput > 0 && userInput < 4)
+                {
+                    preferences.GameMode = IntToGameModeDict[userInput];
+                    element.Title = $"Game mode: {GameModeDict[preferences.GameMode]}";
+                    return true;
+                }
+
+                return false;
+            });
+            Menu gameModeSet = new Menu("Please, input a digit (1, 2 or 3) that corresponds to the chosen game mode\n" +
+                                        "1. Computer vs. Computer\n" +
+                                        "2. Human vs. Computer\n" +
+                                        "3. Human vs. Human", "");
+            gameMode.AddElement(gameModeSet);
             
             boardProperty.AddElement(boardSize, numberOfMarksToWin);
 
