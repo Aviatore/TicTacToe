@@ -8,9 +8,9 @@ namespace TicTacToe
         private List<Menu> MenuElements;
         //private List<string> MenuLabel;
         private string MenuLabel;
-        private string Title { get; set; }
+        public string Title { get; set; }
         public Menu BackReference { get; set; }
-        private Action<string> Callback;
+        private Func<string, Menu, bool> Callback;
         
         public Menu()
         {
@@ -28,7 +28,7 @@ namespace TicTacToe
             MenuLabel = menuLabel;
         }
 
-        public void SetCallBack(Action<string> callback)
+        public void SetCallBack(Func<string, Menu, bool> callback)
         {
             Callback = callback;
         }
@@ -69,7 +69,12 @@ namespace TicTacToe
 
                 if (Callback != null)
                 {
-                    Callback(userInput);
+                    if (!Callback(userInput, this))
+                    {
+                        ClearPreviousLine();
+                        continue;
+                    }
+                    
                     BackReference?.ShowMenu();
                 }
                 else
@@ -99,6 +104,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// The function creates the menu label by recursively analysing back-referencing elements
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         private string CreateMenuLabels(Menu element)
         {
             string output;
@@ -106,7 +116,7 @@ namespace TicTacToe
             if (element.BackReference != null)
             {
                 output = CreateMenuLabels(element.BackReference);
-                return $"{output}/{element.MenuLabel}";
+                return $"{output}=>{element.MenuLabel}";
             }
             else
             {

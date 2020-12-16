@@ -19,7 +19,7 @@ namespace TicTacToe
     public class Board
     {
         public List<Point> WinnerLocation = null;
-        readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
+        readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'};
         private int[,] _board;
 
         private readonly Dictionary<int, char> _marks = new Dictionary<int, char>()

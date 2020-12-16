@@ -18,6 +18,29 @@ namespace TicTacToe
         Computer
     }
 
+    public enum GameMode
+    {
+        HumanHuman,
+        HumanComputer,
+        ComputerComputer
+    }
+    
+    public struct Preferences
+    {
+        public int BoardSize;
+        public GameMode GameMode;
+        public PlayerData Player1;
+        public PlayerData Player2;
+        public int numberOfMarksToWin;
+    }
+
+    public struct PlayerData
+    {
+        public string Name;
+        public Species Species;
+        public Colors Color;
+    }
+
     public class Game
     {
         public Player Player1;
@@ -25,12 +48,33 @@ namespace TicTacToe
         
         private Board board;
 
-        public Game(int row, int col)
+        public Game(int row, int col, int numberToWin)
         {
-            board = new Board(row, col, 4);
+            Preferences preferences = new Preferences();
+            preferences.BoardSize = 9;
+            preferences.GameMode = GameMode.HumanComputer;
+            preferences.numberOfMarksToWin = 5;
+            preferences.Player1 = new PlayerData()
+            {
+                Color = Colors.Blue,
+                Name = "Player1",
+                Species = Species.Human
+            };
+            preferences.Player2 = new PlayerData()
+            {
+                Color = Colors.Red,
+                Name = "Player2",
+                Species = Species.Computer
+            };
             
-            Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
-            Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
+            GameMenu.CreateMenu(preferences);
+            
+            board = new Board(preferences.BoardSize, preferences.BoardSize, preferences.numberOfMarksToWin);
+            
+            Player1 = new Player(preferences.Player1.Species, preferences.Player1.Name, 1, board, preferences.Player1.Color);
+            Player2 = new Player(preferences.Player2.Species, preferences.Player2.Name, 2, board, preferences.Player2.Color);
+            //Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
+            //Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
         }
 
         public void ShowBoard()
@@ -44,41 +88,6 @@ namespace TicTacToe
 
         public void GameLoop()
         {
-            Menu menu = new Menu();
-            
-            Menu lvlA1 = new Menu("A1", "A1 label");
-            //lvlA1.AddMenuLabel("A1 label");
-            Menu lvlA2 = new Menu("A2", "A2 label");
-            //lvlA2.AddMenuLabel("A2 label");
-            
-            Menu lvlB1 = new Menu("B1", "B1 label");
-            //lvlB1.AddMenuLabel("B1 label");
-            Menu lvlB2 = new Menu("B2", "B2 label");
-            //lvlB2.AddMenuLabel("B2 label");
-
-            lvlA1.AddElement(lvlB1, lvlB2);
-            
-            Menu lvlC1 = new Menu("C1", "C1 label");
-            //lvlC1.AddMenuLabel("C1 label");
-            Menu lvlC2 = new Menu("C2", "C2 label");
-            //lvlC2.AddMenuLabel("C2 label");
-            
-            lvlA2.AddElement(lvlC1, lvlC2);
-            
-            Menu acc = new Menu("Change something", "Change label");
-            //acc.AddMenuLabel("Change label");
-            
-            Menu acc2 = new Menu("Provide a number:", "ppp");
-            acc.SetCallBack((string s) =>
-            {
-                Console.WriteLine($"Congrats! Your message: {s}");
-            });
-            acc.AddElement(acc2);
-            
-            menu.AddElement(lvlA1, lvlA2, acc);
-            
-            menu.ShowMenu();
-            
             bool loop = true;
             
             Console.Clear();
