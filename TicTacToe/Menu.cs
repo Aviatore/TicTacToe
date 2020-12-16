@@ -6,6 +6,8 @@ namespace TicTacToe
     public class Menu
     {
         private List<Menu> MenuElements;
+        //private List<string> MenuLabel;
+        private string MenuLabel;
         private string Title { get; set; }
         public Menu BackReference { get; set; }
         private Action<string> Callback;
@@ -13,12 +15,17 @@ namespace TicTacToe
         public Menu()
         {
             MenuElements = new List<Menu>();
+            //MenuLabel = new List<string>();
+            //MenuLabel.Insert(0, "Menu");
+            MenuLabel = "Menu";
         }
 
-        public Menu(string title)
+        public Menu(string title, string menuLabel)
         {
             MenuElements = new List<Menu>();
             Title = title;
+            //MenuLabel = new List<string>();
+            MenuLabel = menuLabel;
         }
 
         public void SetCallBack(Action<string> callback)
@@ -29,7 +36,7 @@ namespace TicTacToe
         public void ShowMenu()
         {
             Console.Clear();
-            Console.WriteLine("Menu:");
+            Console.WriteLine(CreateMenuLabels(this));
             //Console.WriteLine(MenuElements.Count);
             if (Callback != null)
             {
@@ -92,6 +99,23 @@ namespace TicTacToe
             }
         }
 
+        private string CreateMenuLabels(Menu element)
+        {
+            string output;
+            
+            if (element.BackReference != null)
+            {
+                output = CreateMenuLabels(element.BackReference);
+                return $"{output}/{element.MenuLabel}";
+            }
+            else
+            {
+                output = "Menu";
+            }
+
+            return output;
+        }
+
         private void ClearPreviousLine()
         {
             int currentLineCursor = Console.CursorTop;
@@ -100,9 +124,16 @@ namespace TicTacToe
             Console.SetCursorPosition(0, currentLineCursor - 1);
         }
 
+        public void AddMenuLabel(string label)
+        {
+            //MenuLabel.Add(label);
+        }
+        
         public void AddElement(Menu element)
         {
             element.BackReference = this;
+            //element.MenuLabel.InsertRange(0, this.MenuLabel);
+            
             MenuElements.Add(element);
             
             BackReference = this;
@@ -113,6 +144,7 @@ namespace TicTacToe
             foreach (Menu element in elements)
             {
                 element.BackReference = this;
+                //element.MenuLabel.InsertRange(0, this.MenuLabel);
                 MenuElements.Add(element);                
             }
         }
