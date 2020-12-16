@@ -44,6 +44,34 @@ namespace TicTacToe
 
         public void GameLoop()
         {
+            Menu menu = new Menu();
+            
+            Menu lvlA1 = new Menu("A1");
+            Menu lvlA2 = new Menu("A2");
+            
+            Menu lvlB1 = new Menu("B1");
+            Menu lvlB2 = new Menu("B2");
+
+            lvlA1.AddElement(lvlB1, lvlB2);
+            
+            Menu lvlC1 = new Menu("C1");
+            Menu lvlC2 = new Menu("C2");
+            
+            lvlA2.AddElement(lvlC1, lvlC2);
+            
+            Menu acc = new Menu("Change something");
+            
+            Menu acc2 = new Menu("Provide a number:");
+            acc.SetCallBack((string s) =>
+            {
+                Console.WriteLine($"Congrats! Your message: {s}");
+            });
+            acc.AddElement(acc2);
+            
+            menu.AddElement(lvlA1, lvlA2, acc);
+            
+            menu.ShowMenu();
+            
             bool loop = true;
             
             Console.Clear();
