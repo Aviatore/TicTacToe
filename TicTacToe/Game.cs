@@ -26,13 +26,13 @@ namespace TicTacToe
     }
     
     
-    public struct Preferences
+    public class Preferences
     {
-        public int BoardSize;
+        public int BoardSize { get; set; }
         public GameMode GameMode;
         public PlayerData Player1;
         public PlayerData Player2;
-        public int numberOfMarksToWin;
+        public int numberOfMarksToWin { get; set; }
     }
 
     public struct PlayerData
@@ -51,31 +51,24 @@ namespace TicTacToe
 
         public Game(int row, int col, int numberToWin)
         {
-            Preferences preferences = new Preferences();
-            preferences.BoardSize = 9;
-            preferences.GameMode = GameMode.HumanComputer;
-            preferences.numberOfMarksToWin = 5;
-            preferences.Player1 = new PlayerData()
-            {
-                Color = Colors.Blue,
-                Name = "Player1",
-                Species = Species.Human
-            };
-            preferences.Player2 = new PlayerData()
-            {
-                Color = Colors.Red,
-                Name = "Player2",
-                Species = Species.Computer
-            };
             
-            GameMenu.CreateMenu(preferences);
             
+            //board = new Board(preferences.BoardSize, preferences.BoardSize, preferences.numberOfMarksToWin);
+            
+            //Player1 = new Player(preferences.Player1.Species, preferences.Player1.Name, 1, board, preferences.Player1.Color);
+            //Player2 = new Player(preferences.Player2.Species, preferences.Player2.Name, 2, board, preferences.Player2.Color);
+            //Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
+            //Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
+        }
+
+        public void CreateGame(Preferences preferences)
+        {
             board = new Board(preferences.BoardSize, preferences.BoardSize, preferences.numberOfMarksToWin);
             
             Player1 = new Player(preferences.Player1.Species, preferences.Player1.Name, 1, board, preferences.Player1.Color);
             Player2 = new Player(preferences.Player2.Species, preferences.Player2.Name, 2, board, preferences.Player2.Color);
-            //Player1 = new Player(Species.Human, "John", 1, board, Colors.Blue);
-            //Player2 = new Player( Species.Computer,"Mike", 2, board, Colors.Red);
+            
+            GameLoop();
         }
 
         public void ShowBoard()

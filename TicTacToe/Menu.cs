@@ -7,25 +7,38 @@ namespace TicTacToe
     {
         private List<Menu> MenuElements;
         //private List<string> MenuLabel;
-        private string MenuLabel;
+        public string MenuLabel { get; set; }
         public string Title { get; set; }
         public Menu BackReference { get; set; }
         private Func<string, Menu, bool> Callback;
+
+        private Preferences _preferences;
+        private Game _game;
         
-        public Menu()
+        
+        public Menu(Preferences preferences)
         {
             MenuElements = new List<Menu>();
             //MenuLabel = new List<string>();
             //MenuLabel.Insert(0, "Menu");
             MenuLabel = "Menu";
+            _preferences = preferences;
         }
 
-        public Menu(string title, string menuLabel)
+        public Menu(string title, string menuLabel, Preferences preferences)
         {
             MenuElements = new List<Menu>();
             Title = title;
             //MenuLabel = new List<string>();
             MenuLabel = menuLabel;
+            _preferences = preferences;
+        }
+        
+        public Menu(Game game, Preferences preferences)
+        {
+            _game = game;
+            _preferences = preferences;
+            
         }
 
         public void SetCallBack(Func<string, Menu, bool> callback)
@@ -35,6 +48,15 @@ namespace TicTacToe
 
         public void ShowMenu()
         {
+            
+            if (MenuElements[0].Title == "")
+            {
+                Game game = new Game(_preferences.BoardSize, _preferences.BoardSize, _preferences.numberOfMarksToWin);
+                
+                game.CreateGame(_preferences);
+                
+                BackReference.ShowMenu();
+            }
             Console.Clear();
             Console.WriteLine(CreateMenuLabels(this));
             //Console.WriteLine(MenuElements.Count);
