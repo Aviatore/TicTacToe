@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace TicTacToe
 {
@@ -44,11 +45,11 @@ namespace TicTacToe
             Menu gameMode = new Menu($"Game mode: {GameModeDict[preferences.GameMode]}", "Game mode", preferences);
             Menu nextStep = new Menu("Next step", "Final settings", preferences);
 
-            Menu boardSize = new Menu($"Board size: {preferences.BoardSize}×{preferences.BoardSize}", "", preferences);
+            Menu boardSize = new Menu($"Board size: {preferences.BoardSize}×{preferences.BoardSize}", "Board size", preferences);
             boardSize.SetCallBack((string s, Menu element) =>
             {
                 int boardSizeTmp;
-                if (int.TryParse(s, out boardSizeTmp))
+                if (int.TryParse(s, out boardSizeTmp) && boardSizeTmp >= 6 && boardSizeTmp <= 9)
                 {
                     preferences.BoardSize = boardSizeTmp;
                     element.Title = $"Board size: {preferences.BoardSize}×{preferences.BoardSize}";
@@ -61,12 +62,12 @@ namespace TicTacToe
             Menu boardSizeSet = new Menu("Please, input a single digit from 6 to 9.", "", preferences);
             boardSize.AddElement(boardSizeSet);
             
-            Menu numberOfMarksToWin = new Menu($"Number of marks to win: {preferences.numberOfMarksToWin}", "", preferences);
+            Menu numberOfMarksToWin = new Menu($"Number of marks to win: {preferences.numberOfMarksToWin}", "Number of marks to win", preferences);
             
             numberOfMarksToWin.SetCallBack((string s, Menu element) =>
             {
                 int numberOfMarksToWinTmp;
-                if (int.TryParse(s, out numberOfMarksToWinTmp))
+                if (int.TryParse(s, out numberOfMarksToWinTmp) && numberOfMarksToWinTmp >= 5)
                 {
                     preferences.numberOfMarksToWin = numberOfMarksToWinTmp;
                     element.Title = $"Number of marks to win: {preferences.numberOfMarksToWin}";
@@ -89,9 +90,9 @@ namespace TicTacToe
             Menu player2Color = new Menu($"Player's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Player's mark color", preferences);
             
             Menu player1ColorSet = new Menu("Set player's color:\n" +
-                                            "1. <1>Blue</1>\n" +
-                                            "2. <2>Yellow</2>\n" +
-                                            "3. <3>Red</3>\n" +
+                                            "1. <1>Blue</>\n" +
+                                            "2. <2>Yellow</>\n" +
+                                            "3. <3>Red</>\n" +
                                             "4. Gray", "", preferences);
             player1Color.SetCallBack((string s, Menu element) =>
             {
@@ -99,6 +100,11 @@ namespace TicTacToe
                 if (int.TryParse(s, out colorTmp))
                 {
                     preferences.Player1.Color = IntToColorDict[colorTmp];
+                    element.Title = $"Player's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>";
+                    
+                    Regex replace = new Regex(@"<\d>\w+<\/>");
+                    element.BackReference.Title = replace.Replace(element.BackReference.Title,
+                        $"<{ColorToIntDict[preferences.Player1.Color]}>X</>");
                     return true;
                 }
 
@@ -107,9 +113,9 @@ namespace TicTacToe
             player1Color.AddElement(player1ColorSet);
             
             Menu player2ColorSet = new Menu("Set player's color:\n" +
-                                            "1. <1>Blue</1>\n" +
-                                            "2. <2>Yellow</2>\n" +
-                                            "3. <3>Red</3>\n" +
+                                            "1. <1>Blue</>\n" +
+                                            "2. <2>Yellow</>\n" +
+                                            "3. <3>Red</>\n" +
                                             "4. Gray", "", preferences);
             
             player2Color.SetCallBack((string s, Menu element) =>
@@ -118,6 +124,12 @@ namespace TicTacToe
                 if (int.TryParse(s, out colorTmp))
                 {
                     preferences.Player2.Color = IntToColorDict[colorTmp];
+                    element.Title = $"Player's mark color: <{ColorToIntDict[preferences.Player2.Color]}>X</>";
+                    
+                    Regex replace = new Regex(@"<\d>\w+<\/>");
+                    element.BackReference.Title = replace.Replace(element.BackReference.Title,
+                        $"<{ColorToIntDict[preferences.Player2.Color]}>O</>");
+
                     return true;
                 }
 
