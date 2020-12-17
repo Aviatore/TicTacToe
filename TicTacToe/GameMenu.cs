@@ -85,9 +85,9 @@ namespace TicTacToe
             Menu player2Settings = new Menu($"Computer settings: Computer <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Computer settings", preferences);
             
             Menu player1Name = new Menu($"Player's name: {preferences.Player1.Name}", "Player's name", preferences);
-            Menu player2Name = new Menu($"Player's name: {preferences.Player2.Name}", "Player's name", preferences);
+            Menu player2Name = new Menu($"Computer's name: {preferences.Player2.Name}", "Player's name", preferences);
             Menu player1Color = new Menu($"Player's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>", "Player's mark color", preferences);
-            Menu player2Color = new Menu($"Player's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Player's mark color", preferences);
+            Menu player2Color = new Menu($"Computer's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Player's mark color", preferences);
             
             Menu player1ColorSet = new Menu("Set player's color:\n" +
                                             "1. <1>Blue</>\n" +
@@ -142,8 +142,12 @@ namespace TicTacToe
             {
                 if (s.Length > 0)
                 {
-                    element.Title = $"Player's name: {s}";
-                    element.BackReference.Title = $"Player settings: {s} X";
+                    Regex replace = new Regex(@"\w+$");
+                    
+                    element.Title = replace.Replace(element.Title, s);
+                    
+                    replace = new Regex(@"\w+(?= <)");
+                    element.BackReference.Title =  replace.Replace(element.BackReference.Title, s);
                     preferences.Player1.Name = s;
                     return true;
                 }
@@ -158,8 +162,12 @@ namespace TicTacToe
             {
                 if (s.Length > 0)
                 {
-                    element.Title = $"Player's name: {s}";
-                    element.BackReference.Title = $"Player settings: {s} X";
+                    Regex replace = new Regex(@"\w+$");
+                    
+                    element.Title = replace.Replace(element.Title, s);
+                    
+                    replace = new Regex(@"\w+(?= <)");
+                    element.BackReference.Title =  replace.Replace(element.BackReference.Title, s);
                     preferences.Player2.Name = s;
                     return true;
                 }
@@ -183,27 +191,45 @@ namespace TicTacToe
                     {
                         case GameMode.ComputerComputer:
                             preferences.Player1.Species = Species.Computer;
+                            preferences.Player1.Name = "Computer";
                             preferences.Player2.Species = Species.Computer;
-                            player1Settings.Title = "Computer1 settings: Computer1 X";
+                            preferences.Player2.Name = "Computer";
+                            player1Settings.Title = $"Computer1 settings: Computer1 <{ColorToIntDict[preferences.Player1.Color]}>X</>";
                             player1Settings.MenuLabel = "Computer settings";
-                            player2Settings.Title = "Computer2 settings: Computer2 O";
+                            player1Name.Title = $"Computer's name: {preferences.Player1.Name}";
+                            player1Color.Title = $"Computer's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>";
+                            player2Settings.Title = $"Computer2 settings: Computer2 <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             player2Settings.MenuLabel = "Computer settings";
+                            player2Name.Title = $"Computer's name: {preferences.Player2.Name}";
+                            player2Color.Title = $"Computer's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             break;
                         case GameMode.HumanComputer:
                             preferences.Player1.Species = Species.Human;
+                            preferences.Player1.Name = "Player";
                             preferences.Player2.Species = Species.Computer;
-                            player1Settings.Title = $"Player settings: {preferences.Player1.Name} X";
+                            preferences.Player2.Name = "Computer";
+                            player1Settings.Title = $"Player settings: {preferences.Player1.Name} <{ColorToIntDict[preferences.Player1.Color]}>X</>";
                             player1Settings.MenuLabel = "Player settings";
-                            player2Settings.Title = "Computer settings: Computer O";
+                            player1Name.Title = $"Player's name: {preferences.Player1.Name}";
+                            player1Color.Title = $"Player's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>";
+                            player2Settings.Title = $"Computer settings: Computer <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             player2Settings.MenuLabel = "Computer settings";
+                            player2Name.Title = $"Computer's name: {preferences.Player2.Name}";
+                            player2Color.Title = $"Computer's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             break;
                         case GameMode.HumanHuman:
                             preferences.Player1.Species = Species.Human;
+                            preferences.Player1.Name = "Player1";
                             preferences.Player2.Species = Species.Human;
-                            player1Settings.Title = $"Player1 settings: {preferences.Player1.Name} X";
+                            preferences.Player2.Name = "Player2";
+                            player1Settings.Title = $"Player1 settings: {preferences.Player1.Name} <{ColorToIntDict[preferences.Player1.Color]}>X</>";
                             player1Settings.MenuLabel = "Player settings";
-                            player2Settings.Title = $"Player2 settings: {preferences.Player2.Name} O";
+                            player1Name.Title = $"Computer's name: {preferences.Player1.Name}";
+                            player1Color.Title = $"Player's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>";
+                            player2Settings.Title = $"Player2 settings: {preferences.Player2.Name} <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             player2Settings.MenuLabel = "Player settings";
+                            player2Name.Title = $"Computer's name: {preferences.Player2.Name}";
+                            player2Color.Title = $"Player's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>";
                             break;
                     }
 
