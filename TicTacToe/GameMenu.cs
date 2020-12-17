@@ -28,6 +28,14 @@ namespace TicTacToe
             {4, Colors.Gray}
         };
         
+        public static Dictionary<Colors, int> ColorToIntDict = new Dictionary<Colors, int>()
+        {
+            {Colors.Blue, 1},
+            {Colors.Yellow, 2},
+            {Colors.Red, 3},
+            {Colors.Gray, 4}
+        };
+        
         public static void CreateMenu(Preferences preferences)
         {
             Menu menu = new Menu(preferences);
@@ -72,18 +80,18 @@ namespace TicTacToe
             numberOfMarksToWin.AddElement(numberOfMarksToWinSet);
             boardProperty.AddElement(boardSize, numberOfMarksToWin);
             
-            Menu player1Settings = new Menu("Player settings: Player X", "Player settings", preferences); 
-            Menu player2Settings = new Menu("Computer settings: Computer O", "Computer settings", preferences);
+            Menu player1Settings = new Menu($"Player settings: Player <{ColorToIntDict[preferences.Player1.Color]}>X</>", "Player settings", preferences); 
+            Menu player2Settings = new Menu($"Computer settings: Computer <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Computer settings", preferences);
             
             Menu player1Name = new Menu($"Player's name: {preferences.Player1.Name}", "Player's name", preferences);
             Menu player2Name = new Menu($"Player's name: {preferences.Player2.Name}", "Player's name", preferences);
-            Menu player1Color = new Menu($"Player's mark color: X", "Player's mark color", preferences);
-            Menu player2Color = new Menu($"Player's mark color: O", "Player's mark color", preferences);
+            Menu player1Color = new Menu($"Player's mark color: <{ColorToIntDict[preferences.Player1.Color]}>X</>", "Player's mark color", preferences);
+            Menu player2Color = new Menu($"Player's mark color: <{ColorToIntDict[preferences.Player2.Color]}>O</>", "Player's mark color", preferences);
             
             Menu player1ColorSet = new Menu("Set player's color:\n" +
-                                            "1. Blue\n" +
-                                            "2. Yellow\n" +
-                                            "3. Red\n" +
+                                            "1. <1>Blue</1>\n" +
+                                            "2. <2>Yellow</2>\n" +
+                                            "3. <3>Red</3>\n" +
                                             "4. Gray", "", preferences);
             player1Color.SetCallBack((string s, Menu element) =>
             {
@@ -99,9 +107,9 @@ namespace TicTacToe
             player1Color.AddElement(player1ColorSet);
             
             Menu player2ColorSet = new Menu("Set player's color:\n" +
-                                            "1. Blue\n" +
-                                            "2. Yellow\n" +
-                                            "3. Red\n" +
+                                            "1. <1>Blue</1>\n" +
+                                            "2. <2>Yellow</2>\n" +
+                                            "3. <3>Red</3>\n" +
                                             "4. Gray", "", preferences);
             
             player2Color.SetCallBack((string s, Menu element) =>

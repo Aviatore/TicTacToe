@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace TicTacToe
 {
@@ -62,13 +63,15 @@ namespace TicTacToe
             //Console.WriteLine(MenuElements.Count);
             if (Callback != null)
             {
-                Console.WriteLine(MenuElements[0].Title);
+                //Console.WriteLine(MenuElements[0].Title);
+                PrintInColor(MenuElements[0].Title);
             }
             else
             {
                 for (int i = 0; i < MenuElements.Count; i++)
                 {
-                    Console.WriteLine($"{i + 1}. {MenuElements[i].Title}");
+                    //Console.WriteLine($"{i + 1}. {MenuElements[i].Title}");
+                    PrintInColor($"{i + 1}. {MenuElements[i].Title}");
                 }
 
                 if (BackReference != null)
@@ -78,6 +81,54 @@ namespace TicTacToe
             }
             
             GetUserInput();
+        }
+
+        private void PrintInColor(string message)
+        {
+            //Console.WriteLine($"color: {Colors.Blue}");
+            Regex marked = new Regex(@"(<\d>)(\w+)(?=<)");
+            Regex nonMarked = new Regex(@"([\w\s]+)(?=<)");
+            Regex removeBraces = new Regex(@"[<>]");
+            
+            //MatchCollection markedMatches = marked.Matches(message);
+            //MatchCollection nonMarkedMatches = nonMarked.Matches(message);
+
+            string[] lines = message.Split("\n");
+            
+            foreach (string line in lines)
+            {
+                string[] words = line.Split(" ");
+                foreach (string word in words)
+                {
+                    //Console.WriteLine($"word: {word}");
+                    MatchCollection markedMatches = marked.Matches(word);
+                    
+                    if (markedMatches.Count > 0)
+                    {
+                        {for (int i = 0; i < markedMatches.Count; i++)
+                            //foreach (Match match in markedMatches)
+                        {
+                            int colorNumber;
+                            bool success = int.TryParse(removeBraces.Replace(markedMatches[i].Groups[1].Value, ""),
+                                out colorNumber);
+
+                            if (!success)
+                                colorNumber = 4;
+
+                            Console.ForegroundColor = (ConsoleColor) GameMenu.IntToColorDict[colorNumber];
+                            Console.Write(markedMatches[i].Groups[2].Value);
+                            Console.ResetColor();
+
+                        }}
+                    }
+                    else
+                    {
+                        Console.Write($"{word} ");
+                    }
+                    
+                }
+                Console.WriteLine("");
+            }
         }
 
         private void GetUserInput()
