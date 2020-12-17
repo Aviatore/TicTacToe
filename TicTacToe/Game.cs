@@ -9,7 +9,8 @@ namespace TicTacToe
     {
         Blue = ConsoleColor.Cyan,
         Yellow = ConsoleColor.Yellow,
-        Red = ConsoleColor.Red
+        Red = ConsoleColor.Red,
+        Gray = ConsoleColor.Gray
     }
 
     public enum Species

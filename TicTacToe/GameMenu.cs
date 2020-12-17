@@ -20,6 +20,14 @@ namespace TicTacToe
             {3, GameMode.HumanHuman}
         };
         
+        public static Dictionary<int, Colors> IntToColorDict = new Dictionary<int, Colors>()
+        {
+            {1, Colors.Blue},
+            {2, Colors.Yellow},
+            {3, Colors.Red},
+            {4, Colors.Gray}
+        };
+        
         public static void CreateMenu(Preferences preferences)
         {
             Menu menu = new Menu(preferences);
@@ -69,6 +77,45 @@ namespace TicTacToe
             
             Menu player1Name = new Menu($"Player's name: {preferences.Player1.Name}", "Player's name", preferences);
             Menu player2Name = new Menu($"Player's name: {preferences.Player2.Name}", "Player's name", preferences);
+            Menu player1Color = new Menu($"Player's mark color: X", "Player's mark color", preferences);
+            Menu player2Color = new Menu($"Player's mark color: O", "Player's mark color", preferences);
+            
+            Menu player1ColorSet = new Menu("Set player's color:\n" +
+                                            "1. Blue\n" +
+                                            "2. Yellow\n" +
+                                            "3. Red\n" +
+                                            "4. Gray", "", preferences);
+            player1Color.SetCallBack((string s, Menu element) =>
+            {
+                int colorTmp;
+                if (int.TryParse(s, out colorTmp))
+                {
+                    preferences.Player1.Color = IntToColorDict[colorTmp];
+                    return true;
+                }
+
+                return false;
+            });
+            player1Color.AddElement(player1ColorSet);
+            
+            Menu player2ColorSet = new Menu("Set player's color:\n" +
+                                            "1. Blue\n" +
+                                            "2. Yellow\n" +
+                                            "3. Red\n" +
+                                            "4. Gray", "", preferences);
+            
+            player2Color.SetCallBack((string s, Menu element) =>
+            {
+                int colorTmp;
+                if (int.TryParse(s, out colorTmp))
+                {
+                    preferences.Player2.Color = IntToColorDict[colorTmp];
+                    return true;
+                }
+
+                return false;
+            });
+            player2Color.AddElement(player2ColorSet);
             
             Menu player1NameSet = new Menu("Set player's name", "", preferences);
             player1Name.SetCallBack((string s, Menu element) =>
@@ -85,7 +132,7 @@ namespace TicTacToe
             });
             
             player1Name.AddElement(player1NameSet);
-            player1Settings.AddElement(player1Name);
+            player1Settings.AddElement(player1Name, player1Color);
             
             player2Name.SetCallBack((string s, Menu element) =>
             {
@@ -102,7 +149,7 @@ namespace TicTacToe
             
             Menu player2NameSet = new Menu("Set player's name", "", preferences);
             player2Name.AddElement(player2NameSet);
-            player2Settings.AddElement(player2Name);
+            player2Settings.AddElement(player2Name, player2Color);
             
             gameMode.SetCallBack((string s, Menu element) =>
             {
