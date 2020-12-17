@@ -67,6 +67,43 @@ namespace TicTacToe
             Menu player1Settings = new Menu("Player settings: Player X", "Player settings", preferences); 
             Menu player2Settings = new Menu("Computer settings: Computer O", "Computer settings", preferences);
             
+            Menu player1Name = new Menu($"Player's name: {preferences.Player1.Name}", "Player's name", preferences);
+            Menu player2Name = new Menu($"Player's name: {preferences.Player2.Name}", "Player's name", preferences);
+            
+            Menu player1NameSet = new Menu("Set player's name", "", preferences);
+            player1Name.SetCallBack((string s, Menu element) =>
+            {
+                if (s.Length > 0)
+                {
+                    element.Title = $"Player's name: {s}";
+                    element.BackReference.Title = $"Player settings: {s} X";
+                    preferences.Player1.Name = s;
+                    return true;
+                }
+
+                return false;
+            });
+            
+            player1Name.AddElement(player1NameSet);
+            player1Settings.AddElement(player1Name);
+            
+            player2Name.SetCallBack((string s, Menu element) =>
+            {
+                if (s.Length > 0)
+                {
+                    element.Title = $"Player's name: {s}";
+                    element.BackReference.Title = $"Player settings: {s} X";
+                    preferences.Player2.Name = s;
+                    return true;
+                }
+
+                return false;
+            });
+            
+            Menu player2NameSet = new Menu("Set player's name", "", preferences);
+            player2Name.AddElement(player2NameSet);
+            player2Settings.AddElement(player2Name);
+            
             gameMode.SetCallBack((string s, Menu element) =>
             {
                 int userInput;
