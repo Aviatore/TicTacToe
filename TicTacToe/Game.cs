@@ -112,6 +112,7 @@ namespace TicTacToe
                     break;
                 }
             };
+            Console.ReadKey();
         }
 
         /// <summary>

@@ -78,18 +78,24 @@ namespace TicTacToe
                     switch (preferences.GameMode)
                     {
                         case GameMode.ComputerComputer:
+                            preferences.Player1.Species = Species.Computer;
+                            preferences.Player2.Species = Species.Computer;
                             player1Settings.Title = "Computer1 settings: Computer1 X";
                             player1Settings.MenuLabel = "Computer settings";
                             player2Settings.Title = "Computer2 settings: Computer2 O";
                             player2Settings.MenuLabel = "Computer settings";
                             break;
                         case GameMode.HumanComputer:
+                            preferences.Player1.Species = Species.Human;
+                            preferences.Player2.Species = Species.Computer;
                             player1Settings.Title = $"Player settings: {preferences.Player1.Name} X";
                             player1Settings.MenuLabel = "Player settings";
                             player2Settings.Title = "Computer settings: Computer O";
                             player2Settings.MenuLabel = "Computer settings";
                             break;
                         case GameMode.HumanHuman:
+                            preferences.Player1.Species = Species.Human;
+                            preferences.Player2.Species = Species.Human;
                             player1Settings.Title = $"Player1 settings: {preferences.Player1.Name} X";
                             player1Settings.MenuLabel = "Player settings";
                             player2Settings.Title = $"Player2 settings: {preferences.Player2.Name} O";

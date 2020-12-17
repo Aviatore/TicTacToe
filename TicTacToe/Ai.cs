@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace TicTacToe
 {
@@ -18,6 +19,7 @@ namespace TicTacToe
 
         public Point AiGetMove()
         {
+            Thread.Sleep(500);
             BestMoveContainer bestMove = new BestMoveContainer();
             
             int[] marksToCheck = new int[2];
