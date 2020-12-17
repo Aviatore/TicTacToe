@@ -113,6 +113,7 @@ namespace TicTacToe
             }
             
             List<Point> freePlaces = _board.GetFreePlaces();
+            Console.WriteLine($"freePlaces: {freePlaces.Count}");
             Point randomLocation = freePlaces[_random.Next(freePlaces.Count)];
             return randomLocation;
             

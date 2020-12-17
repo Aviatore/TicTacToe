@@ -5,6 +5,12 @@ using System.Linq;
 
 namespace TicTacToe
 {
+    public enum GameStatus
+    {
+        Win,
+        Tie,
+        Running
+    }
     public enum Colors
     {
         Blue = ConsoleColor.Cyan,
@@ -90,28 +96,40 @@ namespace TicTacToe
             
             while (loop)
             {
-                loop = Player1.Turn();
+                GameStatus gameStatus = Player1.Turn();
 
                 Console.Clear();
                 board.Print(Player1, Player2);
                 
-                if (!loop)
+                if (gameStatus == GameStatus.Win)
                 {
                     Console.WriteLine($"{Player1.Name} won the game!");
                     break;
                 }
+                else if (gameStatus == GameStatus.Tie)
+                {
+                    Console.WriteLine("It is a tie!");
+                    break;
+                }
+                    
                 
                 
-                loop = Player2.Turn();
+                gameStatus = Player2.Turn();
                 
                 Console.Clear();
                 board.Print(Player1, Player2);
                 
-                if (!loop)
+                if (gameStatus == GameStatus.Win)
                 {
                     Console.WriteLine($"{Player2.Name} won the game!");
                     break;
                 }
+                else if (gameStatus == GameStatus.Tie)
+                {
+                    Console.WriteLine("It is a tie!");
+                    break;
+                }
+                
             };
             Console.ReadKey();
         }

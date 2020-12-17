@@ -139,22 +139,22 @@ namespace TicTacToe
             return location;
         }
         
-        public bool Turn()
+        public GameStatus Turn()
         {
             Point newMove = GetMove();
             _board.Mark(this, newMove);
 
             if (_board.IsPlayerWon(this))
             {
-                return false;
+                return GameStatus.Win;
             }
             else if (_board.IsBoardFull())
             {
                 //Console.WriteLine("Game over!");
-                return false;
+                return GameStatus.Tie;
             }
 
-            return true;
+            return GameStatus.Running;
         }
     }
 }

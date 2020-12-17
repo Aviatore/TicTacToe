@@ -23,7 +23,7 @@ namespace TicTacToe
            preferences.Player2 = new PlayerData()
            {
                Color = Colors.Red,
-               Name = "Player2",
+               Name = "Computer",
                Species = Species.Computer
            };
             
