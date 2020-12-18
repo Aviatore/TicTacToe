@@ -19,7 +19,7 @@ namespace TicTacToe
 
         public Point AiGetMove()
         {
-            Thread.Sleep(500);
+            Thread.Sleep(250);
             BestMoveContainer bestMove = new BestMoveContainer();
             
             int[] marksToCheck = new int[2];
@@ -180,13 +180,12 @@ namespace TicTacToe
                         rowData.ClearFreeCoords();
                     }
 
-                    lenToReact = (_board.RowLength - _board.ItemsNumberToWin) >= 1 ? 2 : 1;
+                    lenToReact = (_board.RowLength - _board.ItemsNumberToWin) >= 1 ? 3 : 1;
 
                     if (rowData.Coords.Count >= (_board.ItemsNumberToWin - lenToReact) &&
                         rowData.FreeCoords.Count >= (_board.ItemsNumberToWin - rowData.Coords.Count))
                     {
-                        //if (rowData.FreeCoords.Count > 0)
-                        //{
+                        /*
                         Point location = rowData.FreeCoords[0];
 
                         // If the number of positions of the same mark that are next to each other or are separated by at most one space
@@ -196,7 +195,26 @@ namespace TicTacToe
                             bestMove.BestMove = location;
                             bestMove.Length = rowData.Coords.Count;
                         }
-                        //}
+                        */
+                        
+                        Point location;
+                        if (rowData.FreeCoords.Count == 3)
+                        {
+                            foreach (Point l in rowData.FreeCoords)
+                            {
+                                Console.WriteLine($"{l.Row}, {l.Col}");
+                            }
+                            location = rowData.FreeCoords[1];
+                        }
+                        else
+                            location = rowData.FreeCoords[^1];
+                        
+                        if (rowData.Coords.Count > bestMove.Length ||
+                            (rowData.Coords.Count == 3 && rowData.FreeCoords.Count == 2))
+                        {
+                            bestMove.BestMove = location;
+                            bestMove.Length = rowData.Coords.Count;
+                        }
                     }
                 }
 
@@ -283,17 +301,17 @@ namespace TicTacToe
                             if (rowData.CoordsContains(coord[0] - d[0], coord[1] - d[1]) ||
                                 rowData.FreeCoordsContains(coord[0] - d[0], coord[1] - d[1]))
                             {
-                                rowData.AddCoordsAtFirstPos(coord[0], coord[1]);
+                                //rowData.AddCoordsAtFirstPos(coord[0], coord[1]);
                                 
-                                /*
+                                
                                 // Check if there is a space between marks of the same type
-                                if (rowData.CoordsContains(rowMod2, colMod2))
+                                if (rowData.CoordsContains(coord[0] - 2, coord[1] - 2))
                                     // if YES, then insert the position to the beginning of the list from which the best move are picked
-                                    rowData.AddCoordsAtFirstPos(row, col);
+                                    rowData.AddCoordsAtFirstPos(coord[0], coord[1]);
                                 else
                                     // if NOT, then append the position to the end of the list
-                                    rowData.AddCoords(row, col);
-                                */
+                                    rowData.AddCoords(coord[0], coord[1]);
+                                
                             }
                             else
                             {
@@ -320,18 +338,31 @@ namespace TicTacToe
                             rowData.ClearFreeCoords();
                         }
 
-                        lenToReact = (_board.RowLength - _board.ItemsNumberToWin) >= 1 ? 2 : 1;
+                        // lenToReact - the number of marks that need to be next to each other to trigger AI's attention 
+                        lenToReact = (_board.RowLength - _board.ItemsNumberToWin) >= 1 ? 3 : 1;
 
                         if (rowData.Coords.Count >= (_board.ItemsNumberToWin - lenToReact) &&
                             rowData.FreeCoords.Count >= (_board.ItemsNumberToWin - rowData.Coords.Count))
                         {
                             //if (rowData.FreeCoords.Count > 0)
                             //{
-                            Point location = rowData.FreeCoords[0];
+                            Point location;
+                            if (rowData.FreeCoords.Count == 3)
+                            {
+                                foreach (Point l in rowData.FreeCoords)
+                                {
+                                    Console.WriteLine($"{l.Row}, {l.Col}");
+                                }
+                                location = rowData.FreeCoords[1];
+                            }
+                            else
+                                location = rowData.FreeCoords[^1];
 
                             // If the number of positions of the same mark that are next to each other or are separated by at most one space
                             // is larger than length of the best move, then the bestMove object is updated
-                            if (rowData.Coords.Count > bestMove.Length)
+                            Console.WriteLine($"free: {rowData.FreeCoords.Count}");
+                            if (rowData.Coords.Count > bestMove.Length ||
+                                (rowData.Coords.Count == 3 && rowData.FreeCoords.Count == 2))
                             {
                                 bestMove.BestMove = location;
                                 bestMove.Length = rowData.Coords.Count;
