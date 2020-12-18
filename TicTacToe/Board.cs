@@ -22,7 +22,7 @@ namespace TicTacToe
         readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'};
         private int[,] _board;
 
-        private readonly Dictionary<int, char> _marks = new Dictionary<int, char>()
+        public readonly Dictionary<int, char> marks = new Dictionary<int, char>()
         {
             {0, '.'},
             {1, 'X'},
@@ -38,7 +38,7 @@ namespace TicTacToe
 
         public void AddColor(int character, Colors color)
         {
-            _markColors[_marks[character]] = (ConsoleColor)color;
+            _markColors[marks[character]] = (ConsoleColor)color;
         }
         
         public readonly int RowLength;
@@ -226,6 +226,11 @@ namespace TicTacToe
 
             return output;
         }
+
+        public int UpperBound(int dimension)
+        {
+            return _board.GetUpperBound(dimension);
+        }
         
         private (bool, List<Point>) GetFiveInCol(Point location, Player player)
         {
@@ -334,21 +339,21 @@ namespace TicTacToe
             return output;
         }
 
-        private bool RightPossible(Point location)
+        public bool RightPossible(Point location)
         {
             if ((ColLength - location.Col) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
-        private bool LeftPossible(Point location)
+        public bool LeftPossible(Point location)
         {
             if ((location.Col + 1) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
-        private bool DownPossible(Point location)
+        public bool DownPossible(Point location)
         {
             if ((RowLength - location.Row) >= ItemsNumberToWin)
                 return true;
@@ -364,13 +369,13 @@ namespace TicTacToe
             if (WinnerLocation != null && WinnerLocation.Contains(location))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(_marks[arrayValue]);
+                Console.Write(marks[arrayValue]);
                 Console.ResetColor();
             }
             else
             {
-                Console.ForegroundColor = _markColors[_marks[arrayValue]];
-                Console.Write(_marks[arrayValue]);
+                Console.ForegroundColor = _markColors[marks[arrayValue]];
+                Console.Write(marks[arrayValue]);
                 Console.ResetColor();
             }
         }
