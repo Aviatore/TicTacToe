@@ -110,7 +110,7 @@ namespace TicTacToe
             
             while (loop)
             {
-                Console.Write("Please, give coordinates: ");
+                Console.Write("\nPlease, give coordinates: ");
                 string userInput = Console.ReadLine();
 
                 if (userInput != null)
@@ -120,10 +120,14 @@ namespace TicTacToe
                         Console.WriteLine("Good bye!");
                         Environment.Exit(0);
                     }
-                    else if (userInput.Length == 2)
+                    else if (userInput.Length > 1 && userInput.Length <= 3)
                     {
-                        int rowIndex = Array.IndexOf(_board.RowLabels, Char.ToUpper(userInput[0]));
-                        int colIndex = Array.IndexOf(_board.ColLabels, Char.ToUpper(userInput[1]).ToString());
+                        //int rowIndex = Array.IndexOf(_board.RowLabels, Char.ToUpper(userInput[0]));
+                        int rowIndex = Array.IndexOf(_board.RowLabels, userInput.ToUpper().Substring(1));
+                        int colIndex = Array.IndexOf(_board.ColLabels, Char.ToUpper(userInput[0]));
+                        
+                        Console.WriteLine($"rowIndex: {rowIndex} => {userInput.ToUpper().Substring(1)}");
+                        Console.WriteLine($"colIndex: {colIndex} => {Char.ToUpper(userInput[0]).ToString()}");
                         
                         if (rowIndex >= 0 && colIndex >= 0)
                             location = new Point(rowIndex, colIndex);

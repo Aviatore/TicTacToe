@@ -49,7 +49,7 @@ namespace TicTacToe
             boardSize.SetCallBack((string s, Menu element) =>
             {
                 int boardSizeTmp;
-                if (int.TryParse(s, out boardSizeTmp) && boardSizeTmp >= 6 && boardSizeTmp <= 9)
+                if (int.TryParse(s, out boardSizeTmp) && boardSizeTmp >= 6 && boardSizeTmp <= 19)
                 {
                     preferences.BoardSize = boardSizeTmp;
                     element.Title = $"Board size: {preferences.BoardSize}×{preferences.BoardSize}";
@@ -59,7 +59,7 @@ namespace TicTacToe
 
                 return false;
             });
-            Menu boardSizeSet = new Menu("Please, input a single digit from 6 to 9.", "", preferences);
+            Menu boardSizeSet = new Menu("Please, input a single digit from 6 to 19.", "", preferences);
             boardSize.AddElement(boardSizeSet);
             
             Menu numberOfMarksToWin = new Menu($"Number of marks to win: {preferences.numberOfMarksToWin}", "Number of marks to win", preferences);
