@@ -59,6 +59,9 @@ namespace TicTacToe
                 BackReference.ShowMenu();
             }
             Console.Clear();
+
+            PrintLogo();
+            
             Console.WriteLine(CreateMenuLabels(this));
             //Console.WriteLine(MenuElements.Count);
             if (Callback != null)
@@ -81,6 +84,17 @@ namespace TicTacToe
             }
             
             GetUserInput();
+        }
+
+        private void PrintLogo()
+        {
+            Console.WriteLine(@"
+  _____                __       
+ / ___/__  __ _  ___  / /____ __
+/ (_ / _ \/  ' \/ _ \/  '_/ // /
+\___/\___/_/_/_/\___/_/\_\\_,_/ 
+                                
+");
         }
 
         private void PrintInColor(string message)
