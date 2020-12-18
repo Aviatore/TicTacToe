@@ -86,7 +86,7 @@ namespace TicTacToe
             Name = name;
             Mark = mark;
             _board = board;
-            Score = 0;
+            Points = 0;
             Color = color;
 
             if (Species == Species.Human)
@@ -110,7 +110,7 @@ namespace TicTacToe
             
             while (loop)
             {
-                Console.Write("Please, give coordinates: ");
+                Console.Write("\nPlease, give coordinates: ");
                 string userInput = Console.ReadLine();
 
                 if (userInput != null)
@@ -120,10 +120,14 @@ namespace TicTacToe
                         Console.WriteLine("Good bye!");
                         Environment.Exit(0);
                     }
-                    else if (userInput.Length == 2)
+                    else if (userInput.Length > 1 && userInput.Length <= 3)
                     {
-                        int rowIndex = Array.IndexOf(_board.RowLabels, Char.ToUpper(userInput[0]));
-                        int colIndex = Array.IndexOf(_board.ColLabels, Char.ToUpper(userInput[1]).ToString());
+                        //int rowIndex = Array.IndexOf(_board.RowLabels, Char.ToUpper(userInput[0]));
+                        int rowIndex = Array.IndexOf(_board.RowLabels, userInput.ToUpper().Substring(1));
+                        int colIndex = Array.IndexOf(_board.ColLabels, Char.ToUpper(userInput[0]));
+                        
+                        Console.WriteLine($"rowIndex: {rowIndex} => {userInput.ToUpper().Substring(1)}");
+                        Console.WriteLine($"colIndex: {colIndex} => {Char.ToUpper(userInput[0]).ToString()}");
                         
                         if (rowIndex >= 0 && colIndex >= 0)
                             location = new Point(rowIndex, colIndex);
@@ -139,22 +143,22 @@ namespace TicTacToe
             return location;
         }
         
-        public bool Turn()
+        public GameStatus Turn()
         {
             Point newMove = GetMove();
             _board.Mark(this, newMove);
 
             if (_board.IsPlayerWon(this))
             {
-                return false;
+                return GameStatus.Win;
             }
             else if (_board.IsBoardFull())
             {
                 //Console.WriteLine("Game over!");
-                return false;
+                return GameStatus.Tie;
             }
 
-            return true;
+            return GameStatus.Running;
         }
     }
 }

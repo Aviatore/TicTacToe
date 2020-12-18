@@ -19,10 +19,10 @@ namespace TicTacToe
     public class Board
     {
         public List<Point> WinnerLocation = null;
-        readonly char[] _rowsTemplate = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
+        readonly char[] _colsTemplate = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
         private int[,] _board;
 
-        private readonly Dictionary<int, char> _marks = new Dictionary<int, char>()
+        public readonly Dictionary<int, char> marks = new Dictionary<int, char>()
         {
             {0, '.'},
             {1, 'X'},
@@ -38,15 +38,15 @@ namespace TicTacToe
 
         public void AddColor(int character, Colors color)
         {
-            _markColors[_marks[character]] = (ConsoleColor)color;
+            _markColors[marks[character]] = (ConsoleColor)color;
         }
         
         public readonly int RowLength;
         public readonly int ColLength;
-        private readonly int[] _cols;
+        private readonly int[] _rows;
         public readonly int ItemsNumberToWin;
-        public readonly string[] ColLabels;
-        public readonly char[] RowLabels;
+        public readonly string[] RowLabels;
+        public readonly char[] ColLabels;
         //public List<Point> WinnerLocation;
 
         public Board(int rowLength, int colLength, int itemsNumberToWin)
@@ -55,23 +55,35 @@ namespace TicTacToe
             ColLength = colLength;
             ItemsNumberToWin = itemsNumberToWin;
             
-            _cols = new int[ColLength];
-            for (int i = 0; i < ColLength; i++)
-                _cols[i] = i + 1;
-
-            ColLabels = new string[ColLength];
-            for (int i = 0; i < ColLength; i++)
-                ColLabels[i] = _cols[i].ToString();
-
-            RowLabels = new char[RowLength];
+            _rows = new int[RowLength];
             for (int i = 0; i < RowLength; i++)
-                RowLabels[i] = _rowsTemplate[i];
+                _rows[i] = i + 1;
+
+            RowLabels = new string[RowLength];
+            for (int i = 0; i < RowLength; i++)
+                RowLabels[i] = _rows[i].ToString();
+
+            ColLabels = new char[ColLength];
+            for (int i = 0; i < ColLength; i++)
+                ColLabels[i] = _colsTemplate[i];
+
+            foreach (char val in ColLabels)
+            {
+                Console.WriteLine(val);
+            }
             
             _board = new int[rowLength, colLength];
 
-            for (int i = 0; i < rowLength; i++)
-            for (int j = 0; j < colLength; j++)
+            ClearBoard();
+        }
+
+        public void ClearBoard()
+        {
+            for (int i = 0; i < RowLength; i++)
+            for (int j = 0; j < ColLength; j++)
                 _board[i, j] = 0;
+
+            WinnerLocation = null;
         }
 
         public void Print(Player player1, Player player2)
@@ -83,18 +95,20 @@ namespace TicTacToe
             int boardTotalLength = (RowLength * 3) + (RowLength - 1) + 2;
 
             string scoreNames = $"{player1.Name} : {player2.Name}";
-            string scoreValues = $"{player1.Score.ToString().PadLeft(player1.Name.Length)} : {player2.Score.ToString()}";
-            int scoreOffset = ((boardTotalLength - scoreNames.Length) / 2);
+            string scoreValues = $"{player1.Points.ToString().PadLeft(player1.Name.Length)} : {player2.Points.ToString()}";
+            int scoreOffset = ((boardTotalLength - scoreNames.Length) / 2) > 0 ? ((boardTotalLength - scoreNames.Length) / 2) : 0;
 
             string spaceLeft = new String(' ', scoreOffset);
             Console.WriteLine($"{spaceLeft}{scoreNames}");
             Console.WriteLine($"{spaceLeft}{scoreValues}");
             Console.WriteLine(" ");
+            //Console.WriteLine($"   {String.Join("   ", ColLabels)}");
             Console.WriteLine($"   {String.Join("   ", ColLabels)}");
 
             for (int i = 0; i < RowLength; i++)
             {
-                Console.Write($"{RowLabels[i]}  ");
+                //Console.Write($"{RowLabels[i]}  ");
+                Console.Write($"   ");
                 for (int j = 0; j < ColLength - 1; j++)
                 {
                     PrintColor(i, j);
@@ -105,7 +119,7 @@ namespace TicTacToe
                 
                 PrintColor(i, ColLength - 1);
                 
-                Console.WriteLine("");
+                Console.WriteLine($"  {RowLabels[i]}");
                 
                 if (i < RowLength - 1)
                     Console.WriteLine($"  {String.Join("+", line)}");
@@ -219,6 +233,11 @@ namespace TicTacToe
 
             return output;
         }
+
+        public int UpperBound(int dimension)
+        {
+            return _board.GetUpperBound(dimension);
+        }
         
         private (bool, List<Point>) GetFiveInCol(Point location, Player player)
         {
@@ -327,21 +346,21 @@ namespace TicTacToe
             return output;
         }
 
-        private bool RightPossible(Point location)
+        public bool RightPossible(Point location)
         {
             if ((ColLength - location.Col) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
-        private bool LeftPossible(Point location)
+        public bool LeftPossible(Point location)
         {
             if ((location.Col + 1) >= ItemsNumberToWin)
                 return true;
             return false;
         }
 
-        private bool DownPossible(Point location)
+        public bool DownPossible(Point location)
         {
             if ((RowLength - location.Row) >= ItemsNumberToWin)
                 return true;
@@ -357,13 +376,13 @@ namespace TicTacToe
             if (WinnerLocation != null && WinnerLocation.Contains(location))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(_marks[arrayValue]);
+                Console.Write(marks[arrayValue]);
                 Console.ResetColor();
             }
             else
             {
-                Console.ForegroundColor = _markColors[_marks[arrayValue]];
-                Console.Write(_marks[arrayValue]);
+                Console.ForegroundColor = _markColors[marks[arrayValue]];
+                Console.Write(marks[arrayValue]);
                 Console.ResetColor();
             }
         }
