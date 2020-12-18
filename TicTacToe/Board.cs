@@ -69,9 +69,16 @@ namespace TicTacToe
             
             _board = new int[rowLength, colLength];
 
-            for (int i = 0; i < rowLength; i++)
-            for (int j = 0; j < colLength; j++)
+            ClearBoard();
+        }
+
+        public void ClearBoard()
+        {
+            for (int i = 0; i < RowLength; i++)
+            for (int j = 0; j < ColLength; j++)
                 _board[i, j] = 0;
+
+            WinnerLocation = null;
         }
 
         public void Print(Player player1, Player player2)
@@ -83,7 +90,7 @@ namespace TicTacToe
             int boardTotalLength = (RowLength * 3) + (RowLength - 1) + 2;
 
             string scoreNames = $"{player1.Name} : {player2.Name}";
-            string scoreValues = $"{player1.Score.ToString().PadLeft(player1.Name.Length)} : {player2.Score.ToString()}";
+            string scoreValues = $"{player1.Points.ToString().PadLeft(player1.Name.Length)} : {player2.Points.ToString()}";
             int scoreOffset = ((boardTotalLength - scoreNames.Length) / 2) > 0 ? ((boardTotalLength - scoreNames.Length) / 2) : 0;
 
             string spaceLeft = new String(' ', scoreOffset);

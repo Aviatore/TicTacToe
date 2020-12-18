@@ -103,13 +103,31 @@ namespace TicTacToe
                 
                 if (gameStatus == GameStatus.Win)
                 {
+                    Player1.Points++;
+                    
+                    Console.Clear();
+                    board.Print(Player1, Player2);
                     Console.WriteLine($"{Player1.Name} won the game!");
-                    break;
+                    
+                    if (!NextRoundQuestion())
+                        break;
+                    else
+                    {
+                        Console.Clear();
+                        board.Print(Player1, Player2);
+                    }
                 }
                 else if (gameStatus == GameStatus.Tie)
                 {
                     Console.WriteLine("It is a tie!");
-                    break;
+
+                    if (!NextRoundQuestion())
+                        break;
+                    else
+                    {
+                        Console.Clear();
+                        board.Print(Player1, Player2);
+                    }
                 }
                     
                 
@@ -121,17 +139,67 @@ namespace TicTacToe
                 
                 if (gameStatus == GameStatus.Win)
                 {
+                    Player2.Points++;
+                    
+                    Console.Clear();
+                    board.Print(Player1, Player2);
                     Console.WriteLine($"{Player2.Name} won the game!");
-                    break;
+                    
+                    if (!NextRoundQuestion())
+                        break;
+                    else
+                    {
+                        Console.Clear();
+                        board.Print(Player1, Player2);
+                    }
                 }
                 else if (gameStatus == GameStatus.Tie)
                 {
                     Console.WriteLine("It is a tie!");
-                    break;
+                    
+                    if (!NextRoundQuestion())
+                        break;
+                    else
+                    {
+                        Console.Clear();
+                        board.Print(Player1, Player2);
+                    }
                 }
                 
             };
-            Console.ReadKey();
+            //Console.ReadKey();
+        }
+
+        private bool NextRoundQuestion()
+        {
+            Console.WriteLine("Press [n] to play next game or [m] to go back to the game menu.");
+
+            bool loop = true;
+            
+            while (loop)
+            {
+                Console.Write("> ");
+                string userInput = Console.ReadLine();
+                
+                if (userInput != null)
+                {
+                    if (userInput.ToLower() == "n")
+                    {
+                        board.ClearBoard();
+                        return true;
+                    }
+                    else if (userInput.ToLower() == "m")
+                        return false;
+                    else if (userInput.ToLower() == "quit")
+                    {
+                        Console.WriteLine("Good bye!");
+                        Environment.Exit(0);
+                    }
+                }
+                Menu.ClearPreviousLine();
+            }
+
+            return false;
         }
 
         /// <summary>

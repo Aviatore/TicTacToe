@@ -140,6 +140,12 @@ namespace TicTacToe
                 Console.Write("> ");
                 string userInput = Console.ReadLine();
 
+                if (userInput.ToLower() == "quit")
+                {
+                    Console.WriteLine("Good bye!");
+                    Environment.Exit(0);
+                }
+                
                 if (Callback != null)
                 {
                     if (!Callback(userInput, this))
@@ -199,7 +205,7 @@ namespace TicTacToe
             return output;
         }
 
-        private void ClearPreviousLine()
+        public static void ClearPreviousLine()
         {
             int currentLineCursor = Console.CursorTop;
             Console.SetCursorPosition(0, Console.CursorTop - 1);

@@ -86,7 +86,7 @@ namespace TicTacToe
             Name = name;
             Mark = mark;
             _board = board;
-            Score = 0;
+            Points = 0;
             Color = color;
 
             if (Species == Species.Human)
